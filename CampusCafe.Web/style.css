@@ -1,0 +1,43 @@
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+body { background-color: #f1f5f9; color: #0f172a; }
+
+.navbar { background: #0f172a; color: white; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+.logo { font-size: 20px; font-weight: bold; }
+.logo span { font-size: 14px; color: #94a3b8; }
+
+.container { padding: 24px; max-width: 1400px; margin: 0 auto; }
+
+.tabs { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 2px solid #e2e8f0; }
+.tab-btn { padding: 10px 16px; font-weight: bold; border: none; background: #e2e8f0; border-radius: 6px 6px 0 0; cursor: pointer; color: #475569; font-size: 14px; }
+.tab-btn.active { background: white; color: #0f172a; border-top: 3px solid #2563eb; }
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.grid-layout { display: grid; grid-template-columns: 320px 1fr; gap: 20px; }
+.card { background: white; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; }
+
+form label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin: 10px 0 4px; }
+form input, form select, form textarea { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px; }
+.checkbox-group { display: flex; align-items: center; gap: 8px; margin: 16px 0; }
+
+.btn-primary { background: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-weight: bold; cursor: pointer; }
+.btn-dark { background: #0f172a; color: white; border: none; padding: 10px; width: 100%; border-radius: 4px; font-weight: bold; cursor: pointer; }
+
+.products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.category-block { background: white; padding: 16px; border-radius: 8px; border: 1px solid #e2e8f0; }
+.category-block h4 { background: #0f172a; color: white; padding: 8px 12px; border-radius: 4px; margin-bottom: 12px; font-size: 14px; }
+.category-block.blue-header h4 { background: #1e3a8a; }
+.category-block.brown-header h4 { background: #451a03; }
+
+.item-card { border: 1px solid #e2e8f0; background: #f8fafc; padding: 12px; border-radius: 6px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+.badge { border: none; padding: 4px 8px; border-radius: 4px; color: white; font-weight: bold; font-size: 10px; cursor: pointer; margin-left: 6px; }
+.badge.available { background-color: #16a34a; }
+.badge.unavailable { background-color: #dc2626; }
+
+.btn-qty { width: 32px; height: 32px; border: none; border-radius: 4px; font-weight: bold; font-size: 16px; color: white; cursor: pointer; margin-left: 4px; }
+.btn-plus { background-color: #16a34a; }
+.btn-minus { background-color: #dc2626; }
+
+.search-bar { display: flex; gap: 8px; margin-bottom: 16px; }
+.search-bar input { flex: 1; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px; }
