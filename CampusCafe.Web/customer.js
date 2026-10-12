@@ -4,6 +4,7 @@ let allProducts = [];
 let cart = [];
 let currentCategory = "All";
 let currentCustomerName = "";
+let currentCustomerType = "Student";
 
 document.addEventListener("DOMContentLoaded", () => {
     loadProducts();
@@ -14,6 +15,15 @@ function showLandingPage() {
     document.getElementById("menu-section").style.display = "none";
 }
 
+function showMenuDirectly() {
+    if (!currentCustomerName) {
+        promptCustomerName();
+    } else {
+        document.getElementById("landing-hero").style.display = "none";
+        document.getElementById("menu-section").style.display = "grid";
+    }
+}
+
 function startOrderingProcess() {
     promptCustomerName();
 }
@@ -22,14 +32,23 @@ function promptCustomerName() {
     document.getElementById("name-modal").style.display = "flex";
 }
 
+function closeNameModal() {
+    document.getElementById("name-modal").style.display = "none";
+}
+
 function confirmCustomerName() {
-    const input = document.getElementById("customer-name-input").value.trim();
-    if (!input) {
+    const nameInput = document.getElementById("customer-name-input").value.trim();
+    const typeInput = document.getElementById("customer-type-input").value;
+
+    if (!nameInput) {
         alert("Please enter a valid name to continue.");
         return;
     }
-    currentCustomerName = input;
-    document.getElementById("customer-display-name").textContent = `Customer: ${currentCustomerName}`;
+
+    currentCustomerName = nameInput;
+    currentCustomerType = typeInput;
+
+    document.getElementById("customer-display-name").textContent = `${currentCustomerName} (${currentCustomerType})`;
     document.getElementById("name-modal").style.display = "none";
     
     document.getElementById("landing-hero").style.display = "none";
@@ -59,7 +78,7 @@ function isAvailable(status) {
 function filterCategory(category, evt) {
     currentCategory = category;
     document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
-    evt.target.classList.add('active');
+    if (evt) evt.target.classList.add('active');
     renderGrid();
 }
 
@@ -235,7 +254,13 @@ function updateCart() {
     const cartBody = document.getElementById("cart-body");
 
     if (cart.length === 0) {
-        cartBody.innerHTML = `<div style="text-align: center; color: #6b7280; margin-top: 40px; font-size: 14px;">Select items from the menu to build your order</div>`;
+        cartBody.innerHTML = `
+            <div class="empty-cart-state">
+                <div class="empty-cart-icon">🛍️</div>
+                <div class="empty-cart-title">Your order is empty</div>
+                <div class="empty-cart-sub">Select beverages from the menu to build your order</div>
+            </div>
+        `;
         document.getElementById("subtotal-val").textContent = "₱0.00";
         document.getElementById("tax-val").textContent = "₱0.00";
         document.getElementById("total-val").textContent = "₱0.00";
@@ -284,6 +309,7 @@ async function payNow() {
 
     const payload = {
         customerName: currentCustomerName,
+        customerType: currentCustomerType,
         employeeID: 1,
         totalAmount: totalAmount,
         items: cart.map(item => ({
@@ -302,7 +328,14 @@ async function payNow() {
 
         if (res.ok) {
             const result = await res.json();
-            alert(`🎉 Order #${result.orderId} placed successfully for ${result.customerName}!`);
+            
+            document.getElementById("success-order-id").textContent = `#${result.orderId}`;
+            document.getElementById("success-cust-name").textContent = `${result.customerName} (${currentCustomerType})`;
+            document.getElementById("success-item-count").textContent = `${cart.reduce((a, b) => a + b.quantity, 0)} items`;
+            document.getElementById("success-total-amount").textContent = `₱${totalAmount.toFixed(2)}`;
+
+            document.getElementById("success-modal").style.display = "flex";
+
             cart = [];
             updateCart();
         } else {
@@ -312,6 +345,10 @@ async function payNow() {
     } catch (err) {
         alert("Network error: Please verify C# API server is running.");
     }
+}
+
+function closeSuccessModal() {
+    document.getElementById("success-modal").style.display = "none";
 }
 
 function showAboutModal() {

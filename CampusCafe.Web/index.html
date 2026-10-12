@@ -18,7 +18,6 @@
         .module-section { display: none; }
         .module-section.active { display: block; }
 
-        /* GRID FOR PRODUCTS */
         .products-dashboard { display: grid; grid-template-columns: 300px 1fr 1fr; gap: 20px; }
         .admin-card { background: white; border-radius: 14px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
         .admin-card h3 { font-size: 16px; font-weight: 800; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #f1f5f9; text-transform: uppercase; }
@@ -29,23 +28,71 @@
         .product-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
         .product-item:last-child { border-bottom: none; }
 
-        /* FORM STYLES */
         .form-group { margin-bottom: 14px; }
         .form-group label { display: block; font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 4px; }
         .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; }
         .btn-submit { width: 100%; background: #1e293b; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; }
 
-        /* TABLES */
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
         th { background: #f8fafc; font-weight: 700; color: #475569; }
+
+        /* AUTH MODAL STYLES */
+        .auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(4px); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+        .auth-card { background: white; border-radius: 20px; padding: 32px; width: 400px; text-align: center; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); transition: transform 0.2s ease; }
+        
+        .shake { animation: shake 0.35s ease-in-out; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+
+        .auth-title { font-size: 22px; font-weight: 800; color: #0f172a; margin-bottom: 8px; }
+        .auth-desc { font-size: 13px; color: #64748b; margin-bottom: 20px; }
+
+        .auth-field { text-align: left; margin-bottom: 12px; }
+        .auth-field label { display: block; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; text-transform: uppercase; }
+        .auth-input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 14px; outline: none; background: #f8fafc; }
+        
+        .btn-login { width: 100%; background: #0f172a; color: white; border: none; padding: 14px; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 8px; }
+        .auth-error { color: #dc2626; font-size: 13px; font-weight: 700; margin-top: 12px; display: none; background: #fef2f2; padding: 10px; border-radius: 8px; border: 1px solid #fecaca; line-height: 1.4; }
     </style>
 </head>
 <body>
 
+    <!-- STAFF AUTHENTICATION MODAL -->
+    <div id="auth-modal" class="auth-overlay">
+        <div id="auth-card" class="auth-card">
+            <div style="font-size: 40px; margin-bottom: 8px;">🛡️</div>
+            <h2 class="auth-title">Registered Staff Only</h2>
+            <p class="auth-desc">Enter your registered Staff Name to proceed:</p>
+            
+            <div class="auth-field">
+                <label>Staff Name</label>
+                <input type="text" id="staff-name-input" class="auth-input" placeholder="Enter Staff Name" autofocus>
+            </div>
+
+            <div class="auth-field">
+                <label>Staff Security PIN</label>
+                <input type="password" id="staff-pin" class="auth-input" placeholder="Enter PIN" onkeydown="if(event.key==='Enter') verifyPasscode()">
+            </div>
+
+            <button class="btn-login" onclick="verifyPasscode()">Authenticate Staff</button>
+            <div id="auth-error-msg" class="auth-error">Access Denied: You are not a registered employee.</div>
+            <a href="customer.html" style="display:block; margin-top:16px; font-size:13px; color:#64748b; text-decoration:none;">← Return to Kiosk</a>
+        </div>
+    </div>
+
     <header>
-        <h1>☕ Campus Café Admin Dashboard</h1>
-        <a href="customer.html" style="text-decoration:none; background:#d97706; color:white; padding:10px 18px; border-radius:8px; font-weight:700;">🛍️ Open Customer Kiosk</a>
+        <div>
+            <h1>☕ Campus Café Admin Dashboard</h1>
+            <p id="logged-staff-badge" style="font-size:13px; color:#475569; margin-top:4px; font-weight:600;"></p>
+        </div>
+        <div>
+            <button onclick="lockDashboard()" style="background:#f3f4f6; border:1px solid #cbd5e1; padding:8px 14px; border-radius:8px; font-weight:700; cursor:pointer; margin-right:8px;">🔒 Lock</button>
+            <a href="customer.html" style="text-decoration:none; background:#d97706; color:white; padding:10px 18px; border-radius:8px; font-weight:700;">🛍️ Open Customer Kiosk</a>
+        </div>
     </header>
 
     <div class="nav-tabs">

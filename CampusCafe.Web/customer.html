@@ -10,14 +10,13 @@
 
         .site-header { background: white; border-bottom: 1px solid #e5e7eb; position: sticky; top: 0; z-index: 100; }
         .header-container { max-width: 1350px; margin: 0 auto; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
-        .brand-logo { font-size: 24px; font-weight: 800; color: #101c42; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        .brand-logo { font-size: 24px; font-weight: 800; color: #101c42; text-decoration: none; display: flex; align-items: center; gap: 8px; cursor: pointer; }
         .brand-logo span { color: #d97706; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
 
         .site-nav { display: flex; gap: 28px; align-items: center; }
         .nav-link { text-decoration: none; color: #374151; font-size: 15px; font-weight: 600; cursor: pointer; }
         .admin-switch-btn { background-color: #f3f4f6; color: #374151; border: 1px solid #d1d5db; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none; }
 
-        /* HERO LANDING SECTION */
         .landing-hero {
             background: linear-gradient(135deg, #101c42 0%, #1e293b 100%);
             color: white;
@@ -46,7 +45,6 @@
         }
         .btn-start-order:hover { transform: translateY(-3px); background: #b45309; }
 
-        /* MENU LAYOUT (HIDDEN UNTIL STARTED) */
         .kiosk-container { display: none; grid-template-columns: 1fr 360px; gap: 32px; max-width: 1350px; margin: 28px auto 40px; padding: 0 32px; }
         .page-title { font-size: 48px; font-weight: 800; margin-bottom: 20px; letter-spacing: -1px; }
 
@@ -72,10 +70,53 @@
 
         .order-panel { background: #e5e7eb; border-radius: 20px; padding: 0; display: flex; flex-direction: column; height: calc(100vh - 120px); position: sticky; top: 100px; overflow: hidden; }
         .order-header { background: #253874; color: white; padding: 18px; text-align: center; border-radius: 16px 16px 0 0; }
-        .order-header h3 { font-size: 20px; font-weight: 700; }
-        .order-header p { font-size: 13px; color: #93c5fd; margin-top: 4px; }
+        .order-header h3 { font-size: 18px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; }
+        
+        .customer-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 6px;
+            font-size: 13px;
+            color: #93c5fd;
+            cursor: pointer;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: background 0.2s ease;
+        }
+        .customer-tag:hover { background: rgba(255, 255, 255, 0.2); }
 
         .order-body { flex: 1; padding: 20px; overflow-y: auto; }
+        
+        .empty-cart-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            color: #64748b;
+            padding: 20px;
+        }
+        .empty-cart-icon {
+            font-size: 42px;
+            margin-bottom: 12px;
+            opacity: 0.8;
+        }
+        .empty-cart-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 4px;
+        }
+        .empty-cart-sub {
+            font-size: 13px;
+            color: #94a3b8;
+            max-width: 200px;
+            line-height: 1.4;
+        }
+
         .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 15px; font-weight: 600; }
         .cart-item-controls { display: flex; align-items: center; gap: 8px; }
         .cart-qty-btn { width: 24px; height: 24px; border-radius: 50%; border: none; background: #cbd5e1; font-weight: bold; cursor: pointer; }
@@ -83,18 +124,37 @@
         .order-footer { padding: 20px; border-top: 1px solid #d1d5db; }
         .summary-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 17px; color: #111827; }
         .summary-row.total { font-size: 22px; font-weight: 800; margin-top: 12px; margin-bottom: 20px; }
-        .btn-pay { width: 100%; background: #101c42; color: white; border: none; padding: 16px; border-radius: 14px; font-size: 18px; font-weight: 800; cursor: pointer; }
+        .btn-pay { width: 100%; background: #101c42; color: white; border: none; padding: 16px; border-radius: 14px; font-size: 18px; font-weight: 800; cursor: pointer; transition: background 0.2s ease; }
+        .btn-pay:hover { background: #1e293b; }
 
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); justify-content: center; align-items: center; z-index: 1000; }
-        .modal-card { background: white; border-radius: 20px; padding: 24px; width: 420px; max-width: 90%; text-align: center; position: relative; }
+        /* MODALS */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-card { background: white; border-radius: 20px; padding: 28px; width: 440px; max-width: 90%; text-align: center; position: relative; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2); }
         .modal-close { position: absolute; top: 16px; right: 20px; background: none; border: none; font-size: 20px; color: #9ca3af; cursor: pointer; }
         .modal-image { height: 140px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 48px; margin-bottom: 16px; overflow: hidden; }
-        .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+        .modal-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; color: #101c42; }
         .modal-desc { font-size: 14px; color: #6b7280; margin-bottom: 20px; line-height: 1.4; }
         .modal-price { font-size: 22px; font-weight: 800; color: #101c42; margin-bottom: 20px; }
         .btn-add-modal { width: 100%; background: #101c42; color: white; border: none; padding: 14px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; }
 
-        .name-input-field { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #cbd5e1; font-size: 16px; margin: 16px 0 20px; outline: none; }
+        .input-label { text-align: left; display: block; font-size: 12px; font-weight: 700; color: #475569; margin-top: 12px; margin-bottom: 4px; }
+        .name-input-field, .select-input-field { width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid #cbd5e1; font-size: 15px; outline: none; background: #f8fafc; }
+
+        .receipt-box { background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px; padding: 16px; text-align: left; margin: 16px 0 20px; font-size: 14px; }
+        .receipt-row { display: flex; justify-content: space-between; margin-bottom: 8px; }
+
+        /* SUCCESS BADGE STYLES */
+        .success-badge-container {
+            width: 72px;
+            height: 72px;
+            background-color: #d1fae5;
+            color: #059669;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px auto;
+        }
 
         .site-footer { background: white; border-top: 1px solid #e5e7eb; padding: 24px 32px; text-align: center; font-size: 13px; color: #6b7280; margin-top: 40px; }
     </style>
@@ -103,9 +163,10 @@
 
     <header class="site-header">
         <div class="header-container">
-            <a href="#" class="brand-logo">☕ CAMPUS CAFÉ <span>Online</span></a>
+            <a class="brand-logo" onclick="showLandingPage()">☕ CAMPUS CAFÉ <span>Online</span></a>
             <nav class="site-nav">
                 <a onclick="showLandingPage()" class="nav-link">Home</a>
+                <a onclick="showMenuDirectly()" class="nav-link">Menu</a>
                 <a onclick="showAboutModal()" class="nav-link">About Us</a>
                 <a onclick="showContactModal()" class="nav-link">Contact</a>
             </nav>
@@ -141,12 +202,19 @@
 
         <div class="order-panel">
             <div class="order-header">
-                <h3>Order #</h3>
-                <p id="customer-display-name" onclick="promptCustomerName()" style="cursor:pointer; text-decoration:underline;">Customer: Click to set name</p>
+                <h3>Order Summary</h3>
+                <div class="customer-tag" onclick="promptCustomerName()">
+                    <span>👤</span>
+                    <span id="customer-display-name">Click to set customer name</span>
+                </div>
             </div>
 
             <div id="cart-body" class="order-body">
-                <div style="text-align: center; color: #6b7280; margin-top: 40px; font-size: 14px;">Select items from the menu to build your order</div>
+                <div class="empty-cart-state">
+                    <div class="empty-cart-icon">🛍️</div>
+                    <div class="empty-cart-title">Your order is empty</div>
+                    <div class="empty-cart-sub">Select beverages from the menu to build your order</div>
+                </div>
             </div>
 
             <div class="order-footer">
@@ -158,15 +226,54 @@
         </div>
     </div>
 
+    <!-- CUSTOMER DETAILS PROMPT MODAL -->
     <div id="name-modal" class="modal-overlay">
         <div class="modal-card">
-            <h3 class="modal-title">Enter Your Name ☕</h3>
-            <p class="modal-desc">Please enter your name so we can personalize your receipt:</p>
-            <input type="text" id="customer-name-input" class="name-input-field" placeholder="e.g. John Doe">
-            <button class="btn-add-modal" onclick="confirmCustomerName()">Browse Menu</button>
+            <button class="modal-close" onclick="closeNameModal()">✕</button>
+            <h3 class="modal-title">Welcome to Campus Café ☕</h3>
+            <p class="modal-desc">Please enter your order details to proceed:</p>
+            
+            <label class="input-label">Customer Name</label>
+            <input type="text" id="customer-name-input" class="name-input-field" placeholder="Example: Juan de la Cruz" onkeydown="if(event.key==='Enter') confirmCustomerName()">
+
+            <label class="input-label">Customer Type</label>
+            <select id="customer-type-input" class="select-input-field">
+                <option value="Student">Student</option>
+                <option value="Faculty">Faculty / Professor</option>
+                <option value="Guest">Guest / Visitor</option>
+            </select>
+
+            <button class="btn-add-modal" style="margin-top:20px;" onclick="confirmCustomerName()">Browse Menu</button>
         </div>
     </div>
 
+    <!-- ORDER SUCCESS CONFIRMATION MODAL -->
+    <div id="success-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="success-badge-container">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
+            <h3 class="modal-title">Order Confirmed!</h3>
+            <p class="modal-desc">Your order has been recorded successfully.</p>
+            
+            <div class="receipt-box">
+                <div class="receipt-row"><strong>Order Number:</strong> <span id="success-order-id">#0</span></div>
+                <div class="receipt-row"><strong>Customer Name:</strong> <span id="success-cust-name">-</span></div>
+                <div class="receipt-row"><strong>Items Ordered:</strong> <span id="success-item-count">0</span></div>
+                <hr style="margin: 10px 0; border: none; border-top: 1px dashed #cbd5e1;">
+                <div class="receipt-row" style="font-size:16px; font-weight:800; color:#101c42;">
+                    <span>Total Amount Paid:</span>
+                    <span id="success-total-amount">₱0.00</span>
+                </div>
+            </div>
+
+            <button class="btn-add-modal" onclick="closeSuccessModal()">Place Another Order</button>
+        </div>
+    </div>
+
+    <!-- PRODUCT DETAILS MODAL -->
     <div id="product-modal" class="modal-overlay" onclick="closeModal(event)">
         <div class="modal-card" onclick="event.stopPropagation()">
             <button class="modal-close" onclick="closeModal()">✕</button>
@@ -178,6 +285,7 @@
         </div>
     </div>
 
+    <!-- GENERIC INFO MODAL -->
     <div id="info-modal" class="modal-overlay" onclick="closeInfoModal(event)">
         <div class="modal-card" onclick="event.stopPropagation()">
             <button class="modal-close" onclick="closeInfoModal()">✕</button>
@@ -188,7 +296,7 @@
     </div>
 
     <footer class="site-footer">
-        © 2026 Campus Café System. Built with ASP.NET Core API & MS Access Database.
+        © 2026 Campus Café. All rights reserved.
     </footer>
 
     <script src="customer.js"></script>

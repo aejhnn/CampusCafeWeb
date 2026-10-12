@@ -1,8 +1,79 @@
 const API_URL = "http://localhost:5005/api";
+const DEFAULT_PIN = "1234";
 
 document.addEventListener("DOMContentLoaded", () => {
-    loadAllModules();
+    checkSession();
 });
+
+function checkSession() {
+    const activeStaff = sessionStorage.getItem("adminStaffName");
+    if (activeStaff) {
+        document.getElementById("auth-modal").style.display = "none";
+        document.getElementById("logged-staff-badge").textContent = `Logged in as: ${activeStaff}`;
+        loadAllModules();
+    } else {
+        document.getElementById("auth-modal").style.display = "flex";
+    }
+}
+
+async function verifyPasscode() {
+    const nameInput = document.getElementById("staff-name-input").value.trim();
+    const pinInput = document.getElementById("staff-pin").value.trim();
+
+    if (!nameInput) {
+        showAuthError("Please enter your Staff Name.");
+        return;
+    }
+
+    if (pinInput !== DEFAULT_PIN) {
+        showAuthError("Incorrect Security PIN! Please try again.");
+        return;
+    }
+
+    try {
+        const res = await fetch(`${API_URL}/Employees/verify`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name: nameInput, passcode: pinInput })
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            const cleanStaffName = data.name || nameInput;
+
+            sessionStorage.setItem("adminStaffName", cleanStaffName);
+            sessionStorage.setItem("adminStaffId", data.employeeId);
+
+            document.getElementById("auth-modal").style.display = "none";
+            document.getElementById("logged-staff-badge").textContent = `Logged in as: ${cleanStaffName}`;
+            document.getElementById("auth-error-msg").style.display = "none";
+
+            loadAllModules();
+        } else {
+            showAuthError("Access Denied: You are not a registered employee.");
+        }
+    } catch (err) {
+        showAuthError("API connection error. Ensure backend server is running.");
+    }
+}
+
+function showAuthError(msg) {
+    const errorMsg = document.getElementById("auth-error-msg");
+    const card = document.getElementById("auth-card");
+
+    errorMsg.textContent = msg;
+    errorMsg.style.display = "block";
+
+    card.classList.remove("shake");
+    void card.offsetWidth; // Force DOM reflow
+    card.classList.add("shake");
+}
+
+function lockDashboard() {
+    sessionStorage.removeItem("adminStaffName");
+    sessionStorage.removeItem("adminStaffId");
+    location.reload();
+}
 
 function loadAllModules() {
     loadProducts();
