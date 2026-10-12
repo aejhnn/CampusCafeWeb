@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.OleDb;
 using Microsoft.Extensions.Configuration;
 
@@ -21,31 +22,27 @@ namespace CampusCafe.API.Controllers
         [HttpGet]
         public IActionResult GetEmployees()
         {
-            var employees = new List<object>();
+            List<object> list = new List<object>();
 
             using (OleDbConnection conn = new OleDbConnection(connectionString))
             {
                 try
                 {
                     conn.Open();
-                    string query = "SELECT EmployeeID, Name, ContactNumber, WorkSchedule FROM Employee";
-                    using (OleDbCommand cmd = new OleDbCommand(query, conn))
+                    using (OleDbCommand cmd = new OleDbCommand("SELECT * FROM Employee", conn))
+                    using (OleDbDataReader reader = cmd.ExecuteReader())
                     {
-                        using (OleDbDataReader reader = cmd.ExecuteReader())
+                        while (reader.Read())
                         {
-                            while (reader.Read())
+                            var emp = new Dictionary<string, object>();
+                            for (int i = 0; i < reader.FieldCount; i++)
                             {
-                                employees.Add(new
-                                {
-                                    EmployeeID = reader["EmployeeID"] != DBNull.Value ? Convert.ToInt32(reader["EmployeeID"]) : 0,
-                                    Name = reader["Name"]?.ToString() ?? "",
-                                    ContactNumber = reader["ContactNumber"]?.ToString() ?? "",
-                                    WorkSchedule = reader["WorkSchedule"]?.ToString() ?? "Full-Time"
-                                });
+                                emp[reader.GetName(i)] = reader.IsDBNull(i) ? null : reader.GetValue(i);
                             }
+                            list.Add(emp);
                         }
                     }
-                    return Ok(employees);
+                    return Ok(list);
                 }
                 catch (Exception ex)
                 {
@@ -54,47 +51,63 @@ namespace CampusCafe.API.Controllers
             }
         }
 
-        [HttpPost]
-        public IActionResult AddEmployee([FromBody] EmployeeCreateDto emp)
+        [HttpPost("verify")]
+        public IActionResult VerifyStaff([FromBody] StaffLoginDto login)
         {
-            if (emp == null) return BadRequest("Invalid employee data.");
+            if (login == null || string.IsNullOrWhiteSpace(login.Name))
+                return BadRequest("Staff Name is required.");
 
             using (OleDbConnection conn = new OleDbConnection(connectionString))
             {
                 try
                 {
                     conn.Open();
-                    int nextId = 1;
-                    using (OleDbCommand maxCmd = new OleDbCommand("SELECT MAX(EmployeeID) FROM Employee", conn))
-                    {
-                        object res = maxCmd.ExecuteScalar();
-                        if (res != null && res != DBNull.Value) nextId = Convert.ToInt32(res) + 1;
-                    }
 
-                    string query = "INSERT INTO Employee (EmployeeID, Name, ContactNumber, WorkSchedule) VALUES (?, ?, ?, ?)";
+                    DataTable empSchema = conn.GetOleDbSchemaTable(OleDbSchemaGuid.Columns, new object[] { null, null, "Employee", null });
+                    HashSet<string> empCols = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                    foreach (DataRow row in empSchema.Rows) empCols.Add(row["COLUMN_NAME"].ToString());
+
+                    string nameCol = empCols.Contains("Name") ? "Name" : (empCols.Contains("EmployeeName") ? "EmployeeName" : "Name");
+                    string idCol = empCols.Contains("EmployeeID") ? "EmployeeID" : "ID";
+
+                    // Query strictly matching Staff Name
+                    string query = $"SELECT [{idCol}], [{nameCol}] FROM Employee WHERE [{nameCol}] LIKE ?";
+                    
                     using (OleDbCommand cmd = new OleDbCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("?", nextId);
-                        cmd.Parameters.AddWithValue("?", emp.Name ?? "");
-                        cmd.Parameters.AddWithValue("?", emp.ContactNumber ?? "");
-                        cmd.Parameters.AddWithValue("?", emp.WorkSchedule ?? "Full-Time");
-                        cmd.ExecuteNonQuery();
+                        string input = login.Name.Trim();
+                        cmd.Parameters.AddWithValue("?", "%" + input + "%");
+
+                        using (OleDbDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                int empId = Convert.ToInt32(reader[idCol]);
+                                string empName = reader[nameCol]?.ToString() ?? "Staff";
+
+                                if (empName.Equals("Kiosk", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    return Unauthorized("Kiosk system accounts cannot access Admin Dashboard.");
+                                }
+
+                                return Ok(new { success = true, employeeId = empId, name = empName });
+                            }
+                        }
                     }
 
-                    return Ok(new { message = "Employee saved successfully!" });
+                    return Unauthorized("Staff name not found in employee database.");
                 }
                 catch (Exception ex)
                 {
-                    return StatusCode(500, $"Failed to insert employee: {ex.Message}");
+                    return StatusCode(500, $"Authentication error: {ex.Message}");
                 }
             }
         }
     }
 
-    public class EmployeeCreateDto
+    public class StaffLoginDto
     {
-        public string Name { get; set; } = string.Empty;
-        public string ContactNumber { get; set; } = string.Empty;
-        public string WorkSchedule { get; set; } = "Full-Time";
+        public string Name { get; set; }
+        public string Passcode { get; set; }
     }
 }
