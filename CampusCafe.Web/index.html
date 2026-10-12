@@ -3,164 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campus Café Interactive Board</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Campus Café - Admin Dashboard</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #f1f5f9; color: #0f172a; padding: 24px; }
+
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        h1 { font-size: 28px; font-weight: 800; color: #1e293b; }
+
+        .nav-tabs { display: flex; gap: 12px; margin-bottom: 24px; }
+        .tab-btn { padding: 12px 20px; background: white; border: 1px solid #cbd5e1; border-radius: 10px; font-weight: 700; cursor: pointer; color: #475569; }
+        .tab-btn.active { background: #1e293b; color: white; border-color: #1e293b; }
+
+        .module-section { display: none; }
+        .module-section.active { display: block; }
+
+        /* GRID FOR PRODUCTS */
+        .products-dashboard { display: grid; grid-template-columns: 300px 1fr 1fr; gap: 20px; }
+        .admin-card { background: white; border-radius: 14px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .admin-card h3 { font-size: 16px; font-weight: 800; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #f1f5f9; text-transform: uppercase; }
+
+        .category-box { background: white; border-radius: 14px; padding: 16px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+        .category-header { background: #1e293b; color: white; padding: 10px 14px; border-radius: 8px; font-weight: 800; font-size: 14px; margin-bottom: 12px; }
+
+        .product-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
+        .product-item:last-child { border-bottom: none; }
+
+        /* FORM STYLES */
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 4px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; }
+        .btn-submit { width: 100%; background: #1e293b; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+
+        /* TABLES */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
+        th { background: #f8fafc; font-weight: 700; color: #475569; }
+    </style>
 </head>
 <body>
-    <header class="navbar">
-        <div class="logo">CAMPUS CAFÉ <span>| Interactive Management Board</span></div>
-        <button class="btn-primary" onclick="fetchAllData()">Show All</button>
+
+    <header>
+        <h1>☕ Campus Café Admin Dashboard</h1>
+        <a href="customer.html" style="text-decoration:none; background:#d97706; color:white; padding:10px 18px; border-radius:8px; font-weight:700;">🛍️ Open Customer Kiosk</a>
     </header>
 
-    <main class="container">
-        <!-- NAVIGATION TABS -->
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('products-tab', event)">📋 Menu Products</button>
-            <button class="tab-btn" onclick="switchTab('ingredients-tab', event)">📦 Ingredients Inventory & Stock Control</button>
-            <button class="tab-btn" onclick="switchTab('employees-tab', event)">👥 Employees</button>
-            <button class="tab-btn" onclick="switchTab('suppliers-tab', event)">🚚 Supplier & Delivery</button>
-        </div>
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('products', event)">📋 Menu Products</button>
+        <button class="tab-btn" onclick="switchTab('ingredients', event)">📦 Ingredients & Stock</button>
+        <button class="tab-btn" onclick="switchTab('employees', event)">👥 Employees</button>
+        <button class="tab-btn" onclick="switchTab('suppliers', event)">🚚 Supplier & Delivery</button>
+    </div>
 
-        <!-- TAB 1: MENU PRODUCTS -->
-        <section id="products-tab" class="tab-content active">
-            <div class="grid-layout">
-                <div class="card form-card">
-                    <h3>+ Add Product</h3>
-                    <form id="product-form">
+    <!-- MODULE 1: PRODUCTS -->
+    <div id="mod-products" class="module-section active">
+        <div class="products-dashboard">
+            <div class="admin-card">
+                <h3>+ Add Product</h3>
+                <form id="add-product-form" onsubmit="addProduct(event)">
+                    <div class="form-group">
                         <label>Product Name</label>
-                        <input type="text" id="p-name" required>
-
+                        <input type="text" id="product-name" required>
+                    </div>
+                    <div class="form-group">
                         <label>Category</label>
-                        <select id="p-category">
+                        <select id="product-category">
                             <option value="Coffee">Coffee</option>
                             <option value="Non-Coffee">Non-Coffee</option>
                             <option value="Tea & Milk Tea">Tea & Milk Tea</option>
                             <option value="Chocolate">Chocolate</option>
                         </select>
-
+                    </div>
+                    <div class="form-group">
                         <label>Price (PHP)</label>
-                        <input type="number" step="0.01" id="p-price" required>
-
+                        <input type="number" step="0.01" id="product-price" required>
+                    </div>
+                    <div class="form-group">
                         <label>Description</label>
-                        <textarea id="p-desc" rows="3"></textarea>
+                        <textarea id="product-desc" rows="3"></textarea>
+                    </div>
+                    <div class="form-group" style="display:flex; align-items:center; gap:8px;">
+                        <input type="checkbox" id="product-available" checked style="width:auto;">
+                        <label style="margin:0;">Available for Order</label>
+                    </div>
+                    <button type="submit" class="btn-submit">Save to Database</button>
+                </form>
+            </div>
 
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="p-available" checked>
-                            <label for="p-available">Available for Order</label>
-                        </div>
-
-                        <button type="submit" class="btn-dark">Save to Database</button>
-                    </form>
+            <div>
+                <div class="category-box">
+                    <div class="category-header">☕ COFFEE</div>
+                    <div id="coffee-products">Loading...</div>
                 </div>
-
-                <div class="products-grid">
-                    <div class="category-block">
-                        <h4>☕ COFFEE</h4>
-                        <div id="coffee-list"></div>
-                    </div>
-                    <div class="category-block">
-                        <h4>🥤 NON-COFFEE</h4>
-                        <div id="non-coffee-list"></div>
-                    </div>
-                    <div class="category-block blue-header">
-                        <h4>🧋 TEA & MILK TEA</h4>
-                        <div id="milktea-list"></div>
-                    </div>
-                    <div class="category-block brown-header">
-                        <h4>🍫 CHOCOLATE</h4>
-                        <div id="chocolate-list"></div>
-                    </div>
+                <div class="category-box">
+                    <div class="category-header">🧋 TEA & MILK TEA</div>
+                    <div id="tea-products">Loading...</div>
                 </div>
             </div>
-        </section>
 
-        <!-- TAB 2: INGREDIENTS -->
-        <section id="ingredients-tab" class="tab-content">
-            <div class="grid-layout">
-                <div class="card form-card">
-                    <h3>+ Add Ingredient</h3>
-                    <form id="ingredient-form">
-                        <label>Ingredient Name</label>
-                        <input type="text" id="i-name" required>
-
-                        <label>Stock Quantity</label>
-                        <input type="number" id="i-qty" required>
-
-                        <label>Unit (e.g. kg, ml, bags)</label>
-                        <input type="text" id="i-unit" required>
-
-                        <button type="submit" class="btn-dark">Save Ingredient</button>
-                    </form>
+            <div>
+                <div class="category-box">
+                    <div class="category-header">🥤 NON-COFFEE</div>
+                    <div id="non-coffee-products">Loading...</div>
                 </div>
-
-                <div class="card inventory-card">
-                    <div class="search-bar">
-                        <input type="text" id="search-ingredient" placeholder="Type ingredient name to search..." onkeyup="filterIngredients()">
-                        <button class="btn-primary">Search</button>
-                    </div>
-                    <div id="ingredients-list" class="list-container"></div>
+                <div class="category-box">
+                    <div class="category-header">🍫 CHOCOLATE</div>
+                    <div id="chocolate-products">Loading...</div>
                 </div>
             </div>
-        </section>
+        </div>
+    </div>
 
-        <!-- TAB 3: EMPLOYEES -->
-        <section id="employees-tab" class="tab-content">
-            <div class="grid-layout">
-                <div class="card form-card">
-                    <h3>+ Add Employee</h3>
-                    <form id="employee-form">
-                        <label>Employee Name</label>
-                        <input type="text" id="e-name" required>
+    <!-- MODULE 2: INGREDIENTS -->
+    <div id="mod-ingredients" class="module-section">
+        <div class="admin-card">
+            <h3>Inventory & Stock Control</h3>
+            <table>
+                <thead>
+                    <tr><th>ID</th><th>Ingredient Name</th><th>Stock Qty</th><th>Unit</th><th>Status</th></tr>
+                </thead>
+                <tbody id="ingredients-table-body">
+                    <tr><td colspan="5">Loading inventory data...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-                        <label>Contact Number</label>
-                        <input type="text" id="e-phone" required>
+    <!-- MODULE 3: EMPLOYEES -->
+    <div id="mod-employees" class="module-section">
+        <div class="admin-card">
+            <h3>Staff & Employees</h3>
+            <table>
+                <thead>
+                    <tr><th>ID</th><th>Full Name</th><th>Role / Position</th><th>Contact Number</th></tr>
+                </thead>
+                <tbody id="employees-table-body">
+                    <tr><td colspan="4">Loading employee data...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-                        <label>Work Schedule</label>
-                        <input type="text" id="e-schedule" placeholder="e.g. Full-Time / Part-Time">
-
-                        <button type="submit" class="btn-dark">Save Employee</button>
-                    </form>
-                </div>
-
-                <div class="card inventory-card">
-                    <div class="search-bar">
-                        <input type="text" id="search-employee" placeholder="Type employee name to search..." onkeyup="filterEmployees()">
-                        <button class="btn-primary">Search</button>
-                    </div>
-                    <div id="employees-list" class="list-container"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 4: SUPPLIERS -->
-        <section id="suppliers-tab" class="tab-content">
-            <div class="grid-layout">
-                <div class="card form-card">
-                    <h3>+ Add Supplier</h3>
-                    <form id="supplier-form">
-                        <label>Supplier Name</label>
-                        <input type="text" id="s-name" required>
-
-                        <label>Contact Person</label>
-                        <input type="text" id="s-person" required>
-
-                        <label>Phone</label>
-                        <input type="text" id="s-phone" required>
-
-                        <button type="submit" class="btn-dark">Save Supplier</button>
-                    </form>
-                </div>
-
-                <div class="card inventory-card">
-                    <div class="search-bar">
-                        <input type="text" id="search-supplier" placeholder="Type supplier name to search..." onkeyup="filterSuppliers()">
-                        <button class="btn-primary">Search</button>
-                    </div>
-                    <div id="suppliers-list" class="list-container"></div>
-                </div>
-            </div>
-        </section>
-    </main>
+    <!-- MODULE 4: SUPPLIERS -->
+    <div id="mod-suppliers" class="module-section">
+        <div class="admin-card">
+            <h3>Suppliers & Delivery</h3>
+            <table>
+                <thead>
+                    <tr><th>ID</th><th>Supplier Name</th><th>Contact Person</th><th>Phone Number</th></tr>
+                </thead>
+                <tbody id="suppliers-table-body">
+                    <tr><td colspan="4">Loading supplier data...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     <script src="app.js"></script>
 </body>

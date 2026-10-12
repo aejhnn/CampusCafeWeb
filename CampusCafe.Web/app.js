@@ -1,310 +1,242 @@
 const API_URL = "http://localhost:5005/api";
 
-let allIngredients = [];
-let allEmployees = [];
-let allSuppliers = [];
-
 document.addEventListener("DOMContentLoaded", () => {
-    fetchAllData();
-
-    document.getElementById("product-form").addEventListener("submit", saveProduct);
-    document.getElementById("ingredient-form").addEventListener("submit", saveIngredient);
-    document.getElementById("employee-form").addEventListener("submit", saveEmployee);
-    document.getElementById("supplier-form").addEventListener("submit", saveSupplier);
+    loadAllModules();
 });
 
-function switchTab(tabId, evt) {
-    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-    
-    document.getElementById(tabId).classList.add('active');
-    evt.target.classList.add('active');
+function loadAllModules() {
+    loadProducts();
+    loadIngredients();
+    loadEmployees();
+    loadSuppliers();
 }
 
-async function fetchAllData() {
-    await fetchProducts();
-    await fetchIngredients();
-    await fetchEmployees();
-    await fetchSuppliers();
+function switchTab(tabName, evt) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.module-section').forEach(mod => mod.classList.remove('active'));
+
+    if (evt) evt.target.classList.add('active');
+    document.getElementById(`mod-${tabName}`).classList.add('active');
 }
 
-// 1. PRODUCTS
-async function fetchProducts() {
+// ---------------------------------------------------------
+// 1. PRODUCTS MODULE
+// ---------------------------------------------------------
+async function loadProducts() {
     try {
         const res = await fetch(`${API_URL}/Products`);
-        if (!res.ok) throw new Error("API network error");
+        if (!res.ok) throw new Error("API error");
         const products = await res.json();
         renderProducts(products);
     } catch (err) {
-        console.error("Failed to load products from API:", err);
+        console.error("Error loading products:", err);
     }
-}
-
-function renderProducts(products) {
-    if (!products || !Array.isArray(products)) return;
-    const filterCat = (cat) => products.filter(p => p.category && p.category.toLowerCase().includes(cat.toLowerCase()));
-
-    renderProductCategory('coffee-list', filterCat('Coffee').filter(p => !p.category.toLowerCase().includes('non')));
-    renderProductCategory('non-coffee-list', filterCat('Non'));
-    renderProductCategory('milktea-list', filterCat('Tea'));
-    renderProductCategory('chocolate-list', filterCat('Chocolate'));
-}
-
-function renderProductCategory(elementId, items) {
-    const container = document.getElementById(elementId);
-    if (!container) return;
-
-    if (items.length === 0) {
-        container.innerHTML = `<div style="font-size:12px; color:#94a3b8; padding:8px;">No products found</div>`;
-        return;
-    }
-
-    container.innerHTML = items.map(p => `
-        <div class="item-card">
-            <div>
-                <strong>${p.productName}</strong>
-                <button class="badge ${isAvailable(p.availabilityStatus) ? 'available' : 'unavailable'}" 
-                        onclick="toggleStatus(${p.productID}, '${p.availabilityStatus}')">
-                    ${p.availabilityStatus}
-                </button>
-                <div style="font-size:11px; color:#64748b; margin-top:2px;">${p.description || ''}</div>
-            </div>
-            <strong>₱${p.price ? p.price.toFixed(2) : '0.00'}</strong>
-        </div>
-    `).join('');
 }
 
 function isAvailable(status) {
-    if (!status) return true;
-    return status.toLowerCase() === 'available' || status.toLowerCase() === 'true';
+    if (status === null || status === undefined) return true;
+    const s = String(status).trim().toLowerCase();
+    return s !== 'unavailable' && s !== 'false' && s !== '0';
 }
 
-async function toggleStatus(id, currentStatus) {
-    const newStatus = isAvailable(currentStatus) ? "Unavailable" : "Available";
-    try {
-        await fetch(`${API_URL}/Products/${id}/toggle-status`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ availabilityStatus: newStatus })
-        });
-        fetchProducts();
-    } catch (err) {
-        alert("Failed to update status. Make sure C# API is running!");
-    }
+function renderProducts(products) {
+    const coffeeContainer = document.getElementById("coffee-products");
+    const nonCoffeeContainer = document.getElementById("non-coffee-products");
+    const teaContainer = document.getElementById("tea-products");
+    const chocolateContainer = document.getElementById("chocolate-products");
+
+    if (coffeeContainer) coffeeContainer.innerHTML = "";
+    if (nonCoffeeContainer) nonCoffeeContainer.innerHTML = "";
+    if (teaContainer) teaContainer.innerHTML = "";
+    if (chocolateContainer) chocolateContainer.innerHTML = "";
+
+    products.forEach(p => {
+        const category = (p.category || '').toLowerCase();
+        const available = isAvailable(p.availabilityStatus);
+
+        const itemHtml = `
+            <div class="product-item">
+                <div>
+                    <strong>${p.productName}</strong>
+                    <div style="font-size:12px; color:#64748b;">₱${p.price.toFixed(2)} - ${p.description || 'No description'}</div>
+                </div>
+                <span style="font-size:11px; padding:3px 8px; border-radius:12px; background:${available ? '#d1fae5' : '#fee2e2'}; color:${available ? '#065f46' : '#991b1b'}; font-weight:700;">
+                    ${available ? 'Available' : 'Unavailable'}
+                </span>
+            </div>
+        `;
+
+        if (category.includes('coffee') && !category.includes('non')) {
+            if (coffeeContainer) coffeeContainer.innerHTML += itemHtml;
+        } else if (category.includes('non')) {
+            if (nonCoffeeContainer) nonCoffeeContainer.innerHTML += itemHtml;
+        } else if (category.includes('tea') || category.includes('milk')) {
+            if (teaContainer) teaContainer.innerHTML += itemHtml;
+        } else if (category.includes('chocolate')) {
+            if (chocolateContainer) chocolateContainer.innerHTML += itemHtml;
+        } else {
+            if (coffeeContainer) coffeeContainer.innerHTML += itemHtml;
+        }
+    });
 }
 
-async function saveProduct(e) {
-    e.preventDefault();
-    const body = {
-        productName: document.getElementById('p-name').value,
-        category: document.getElementById('p-category').value,
-        price: parseFloat(document.getElementById('p-price').value),
-        description: document.getElementById('p-desc').value,
-        availabilityStatus: document.getElementById('p-available').checked ? "Available" : "Unavailable"
+async function addProduct(evt) {
+    if (evt) evt.preventDefault();
+
+    const name = document.getElementById("product-name").value;
+    const category = document.getElementById("product-category").value;
+    const price = parseFloat(document.getElementById("product-price").value);
+    const description = document.getElementById("product-desc").value;
+    const isAvailableVal = document.getElementById("product-available").checked ? "Available" : "Unavailable";
+
+    const payload = {
+        productName: name,
+        category: category,
+        price: price,
+        description: description,
+        availabilityStatus: isAvailableVal
     };
 
     try {
-        await fetch(`${API_URL}/Products`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body)
+        const res = await fetch(`${API_URL}/Products`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
         });
-        document.getElementById('product-form').reset();
-        fetchProducts();
+
+        if (res.ok) {
+            alert("🎉 Product added successfully!");
+            document.getElementById("add-product-form").reset();
+            loadProducts();
+        } else {
+            alert("Failed to add product.");
+        }
     } catch (err) {
-        alert("Could not save product. Verify C# API terminal is running.");
+        console.error("Error adding product:", err);
     }
 }
 
-// 2. INGREDIENTS
-async function fetchIngredients() {
+// ---------------------------------------------------------
+// 2. INGREDIENTS MODULE
+// ---------------------------------------------------------
+async function loadIngredients() {
     try {
         const res = await fetch(`${API_URL}/Ingredients`);
-        if (!res.ok) throw new Error("API network error");
-        allIngredients = await res.json();
-        renderIngredients(allIngredients);
+        if (!res.ok) return;
+        const ingredients = await res.json();
+        renderIngredients(ingredients);
     } catch (err) {
-        console.error("Failed to load ingredients:", err);
+        console.error("Error loading ingredients:", err);
     }
 }
 
-function renderIngredients(items) {
-    const container = document.getElementById('ingredients-list');
-    if (!container) return;
+function renderIngredients(ingredients) {
+    const tableBody = document.getElementById("ingredients-table-body");
+    if (!tableBody) return;
 
-    if (!items || items.length === 0) {
-        container.innerHTML = `<div style="padding:12px; color:#94a3b8;">No ingredients found</div>`;
+    if (!ingredients || ingredients.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="5" style="color:#94a3b8;">No ingredients records found.</td></tr>`;
         return;
     }
 
-    container.innerHTML = items.map(i => `
-        <div class="item-card">
-            <div>
-                <strong>${i.ingredientName}</strong>
-                <div style="font-size:12px; color:#64748b; margin-top:2px;">Quantity: <b style="color:#2563eb;">${i.stockQuantity}</b> ${i.unit || 'pcs'}</div>
-            </div>
-            <div>
-                <button class="btn-qty btn-minus" onclick="updateStock(${i.ingredientID}, ${i.stockQuantity - 1})">−</button>
-                <button class="btn-qty btn-plus" onclick="updateStock(${i.ingredientID}, ${i.stockQuantity + 1})">+</button>
-            </div>
-        </div>
+    tableBody.innerHTML = ingredients.map(ing => `
+        <tr>
+            <td>${ing.ingredientID || ing.ingredientId || ing.id || '-'}</td>
+            <td>${ing.ingredientName || ing.name || '-'}</td>
+            <td>${ing.quantityInStock ?? ing.stock ?? 0}</td>
+            <td>${ing.unitOfMeasure || ing.unit || 'units'}</td>
+            <td>
+                <span style="color: ${(ing.quantityInStock <= (ing.reorderLevel || 10)) ? '#dc2626' : '#16a34a'}; font-weight:bold;">
+                    ${(ing.quantityInStock <= (ing.reorderLevel || 10)) ? 'Low Stock' : 'Available'}
+                </span>
+            </td>
+        </tr>
     `).join('');
 }
 
-async function updateStock(id, newQty) {
-    if (newQty < 0) return;
-    try {
-        await fetch(`${API_URL}/Ingredients/${id}/update-stock`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ newQuantity: newQty })
-        });
-        fetchIngredients();
-    } catch (err) {
-        alert("Stock update failed. Verify API server.");
-    }
-}
-
-async function saveIngredient(e) {
-    e.preventDefault();
-    const body = {
-        ingredientName: document.getElementById('i-name').value,
-        stockQuantity: parseInt(document.getElementById('i-qty').value),
-        unit: document.getElementById('i-unit').value
-    };
-
-    try {
-        await fetch(`${API_URL}/Ingredients`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body)
-        });
-        document.getElementById('ingredient-form').reset();
-        fetchIngredients();
-    } catch (err) {
-        alert("Failed to save ingredient.");
-    }
-}
-
-function filterIngredients() {
-    const filter = document.getElementById('search-ingredient').value.toLowerCase();
-    renderIngredients(allIngredients.filter(i => i.ingredientName && i.ingredientName.toLowerCase().includes(filter)));
-}
-
-// 3. EMPLOYEES
-async function fetchEmployees() {
+// ---------------------------------------------------------
+// 3. EMPLOYEES MODULE
+// ---------------------------------------------------------
+async function loadEmployees() {
     try {
         const res = await fetch(`${API_URL}/Employees`);
-        if (!res.ok) throw new Error("API network error");
-        allEmployees = await res.json();
-        renderEmployees(allEmployees);
+        if (!res.ok) return;
+        const employees = await res.json();
+        renderEmployees(employees);
     } catch (err) {
-        console.error("Failed to load employees:", err);
+        console.error("Error loading employees:", err);
     }
 }
 
-function renderEmployees(items) {
-    const container = document.getElementById('employees-list');
-    if (!container) return;
+function renderEmployees(employees) {
+    const tableBody = document.getElementById("employees-table-body");
+    if (!tableBody) return;
 
-    if (!items || items.length === 0) {
-        container.innerHTML = `<div style="padding:12px; color:#94a3b8;">No employees found</div>`;
+    if (!employees || employees.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="4" style="color:#94a3b8;">No employee records found.</td></tr>`;
         return;
     }
 
-    container.innerHTML = items.map(e => `
-        <div class="item-card">
-            <div>
-                <strong>${e.name}</strong>
-                <div style="font-size:12px; color:#64748b; margin-top:2px;">
-                    Contact: ${e.contactNumber || 'N/A'} | Schedule: <span style="color:#16a34a; font-weight:bold;">${e.workSchedule || 'Full-Time'}</span>
-                </div>
-            </div>
-        </div>
-    `).join('');
+    tableBody.innerHTML = employees.map(emp => {
+        const id = emp.employeeID || emp.employeeId || emp.id || '-';
+
+        let name = emp.employeeName || emp.fullName || emp.name;
+        if (!name) {
+            const fname = emp.firstName || emp.first_name || '';
+            const lname = emp.lastName || emp.last_name || '';
+            name = (fname || lname) ? `${fname} ${lname}`.trim() : Object.values(emp).find(v => typeof v === 'string' && !/^\d+$/.test(v) && v !== emp.role && v !== emp.position) || '-';
+        }
+
+        const role = emp.role || emp.position || emp.jobTitle || emp.employeeRole || 'Staff';
+        const phone = emp.contactNumber || emp.contactNum || emp.phoneNumber || emp.phone || emp.contactNo || Object.values(emp).find(v => typeof v === 'string' && /^\d+$/.test(v)) || 'N/A';
+
+        return `
+            <tr>
+                <td>${id}</td>
+                <td>${name}</td>
+                <td>${role}</td>
+                <td>${phone}</td>
+            </tr>
+        `;
+    }).join('');
 }
 
-async function saveEmployee(evt) {
-    evt.preventDefault();
-    const body = {
-        name: document.getElementById('e-name').value,
-        contactNumber: document.getElementById('e-phone').value,
-        workSchedule: document.getElementById('e-schedule').value || "Full-Time"
-    };
-
-    try {
-        await fetch(`${API_URL}/Employees`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body)
-        });
-        document.getElementById('employee-form').reset();
-        fetchEmployees();
-    } catch (err) {
-        alert("Failed to save employee.");
-    }
-}
-
-function filterEmployees() {
-    const filter = document.getElementById('search-employee').value.toLowerCase();
-    renderEmployees(allEmployees.filter(e => e.name && e.name.toLowerCase().includes(filter)));
-}
-
-// 4. SUPPLIERS
-async function fetchSuppliers() {
+// ---------------------------------------------------------
+// 4. SUPPLIERS MODULE
+// ---------------------------------------------------------
+async function loadSuppliers() {
     try {
         const res = await fetch(`${API_URL}/Suppliers`);
-        if (!res.ok) throw new Error("API network error");
-        allSuppliers = await res.json();
-        renderSuppliers(allSuppliers);
+        if (!res.ok) return;
+        const suppliers = await res.json();
+        renderSuppliers(suppliers);
     } catch (err) {
-        console.error("Failed to load suppliers:", err);
+        console.error("Error loading suppliers:", err);
     }
 }
 
-function renderSuppliers(items) {
-    const container = document.getElementById('suppliers-list');
-    if (!container) return;
+function renderSuppliers(suppliers) {
+    const tableBody = document.getElementById("suppliers-table-body");
+    if (!tableBody) return;
 
-    if (!items || items.length === 0) {
-        container.innerHTML = `<div style="padding:12px; color:#94a3b8;">No suppliers found</div>`;
+    if (!suppliers || suppliers.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="4" style="color:#94a3b8;">No supplier records found.</td></tr>`;
         return;
     }
 
-    container.innerHTML = items.map(s => `
-        <div class="item-card">
-            <div>
-                <strong>${s.supplierName}</strong>
-                <div style="font-size:12px; color:#64748b; margin-top:2px;">
-                    Contact Person: ${s.contactPerson || 'N/A'} | Phone: <span style="color:#2563eb; font-weight:bold;">${s.phone || 'N/A'}</span>
-                </div>
-            </div>
-        </div>
-    `).join('');
-}
+    tableBody.innerHTML = suppliers.map(sup => {
+        const id = sup.supplierID || sup.supplierId || sup.id || '-';
+        const name = sup.supplierName || sup.name || Object.values(sup).find(v => typeof v === 'string' && !/^\d+$/.test(v)) || '-';
+        const contactPerson = sup.contactPerson || sup.person || 'N/A';
+        const phone = sup.contactNumber || sup.contactNum || sup.phoneNumber || sup.phone || 'N/A';
 
-async function saveSupplier(evt) {
-    evt.preventDefault();
-    const body = {
-        supplierName: document.getElementById('s-name').value,
-        contactPerson: document.getElementById('s-person').value,
-        phone: document.getElementById('s-phone').value
-    };
-
-    try {
-        await fetch(`${API_URL}/Suppliers`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body)
-        });
-        document.getElementById('supplier-form').reset();
-        fetchSuppliers();
-    } catch (err) {
-        alert("Failed to save supplier.");
-    }
-}
-
-function filterSuppliers() {
-    const filter = document.getElementById('search-supplier').value.toLowerCase();
-    renderSuppliers(allSuppliers.filter(s => s.supplierName && s.supplierName.toLowerCase().includes(filter)));
+        return `
+            <tr>
+                <td>${id}</td>
+                <td>${name}</td>
+                <td>${contactPerson}</td>
+                <td>${phone}</td>
+            </tr>
+        `;
+    }).join('');
 }
