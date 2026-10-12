@@ -37,3 +37,4 @@ D:\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\refint\CampusCafe.API.dll
 D:\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.pdb
 D:\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.genruntimeconfig.cache
 D:\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\ref\CampusCafe.API.dll
+D:\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.sourcelink.json

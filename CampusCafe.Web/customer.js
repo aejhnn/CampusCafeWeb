@@ -3,11 +3,38 @@ const API_URL = "http://localhost:5005/api";
 let allProducts = [];
 let cart = [];
 let currentCategory = "All";
-let selectedProductForModal = null;
+let currentCustomerName = "";
 
 document.addEventListener("DOMContentLoaded", () => {
     loadProducts();
 });
+
+function showLandingPage() {
+    document.getElementById("landing-hero").style.display = "flex";
+    document.getElementById("menu-section").style.display = "none";
+}
+
+function startOrderingProcess() {
+    promptCustomerName();
+}
+
+function promptCustomerName() {
+    document.getElementById("name-modal").style.display = "flex";
+}
+
+function confirmCustomerName() {
+    const input = document.getElementById("customer-name-input").value.trim();
+    if (!input) {
+        alert("Please enter a valid name to continue.");
+        return;
+    }
+    currentCustomerName = input;
+    document.getElementById("customer-display-name").textContent = `Customer: ${currentCustomerName}`;
+    document.getElementById("name-modal").style.display = "none";
+    
+    document.getElementById("landing-hero").style.display = "none";
+    document.getElementById("menu-section").style.display = "grid";
+}
 
 async function loadProducts() {
     try {
@@ -24,9 +51,9 @@ async function loadProducts() {
 }
 
 function isAvailable(status) {
-    if (!status) return true;
+    if (status === null || status === undefined) return true;
     const s = String(status).trim().toLowerCase();
-    return s === 'available' || s === 'true' || s === '1';
+    return s !== 'unavailable' && s !== 'false' && s !== '0';
 }
 
 function filterCategory(category, evt) {
@@ -65,17 +92,54 @@ function renderGrid() {
         return;
     }
 
-    grid.innerHTML = filtered.map(p => `
-        <div class="product-card" onclick="openProductModal(${p.productID})">
-            <div class="image-placeholder ${getCategoryBgClass(p.productName, p.category)}">
-                ${getDrinkIcon(p.category)}
+    grid.innerHTML = filtered.map(p => {
+        const imagePath = getProductImagePath(p.productName);
+        const bgClass = getCategoryBgClass(p.productName, p.category);
+
+        const imageHtml = imagePath 
+            ? `<img src="${imagePath}" alt="${p.productName}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;" onerror="this.onerror=null; this.parentNode.innerHTML='${getDrinkIcon(p.category)}';">`
+            : getDrinkIcon(p.category);
+
+        return `
+            <div class="product-card" onclick="openProductModal(${p.productID})">
+                <div class="image-placeholder ${bgClass}">
+                    ${imageHtml}
+                </div>
+                <div>
+                    <div class="product-title">${p.productName}</div>
+                    <div class="product-price">₱${p.price.toFixed(2)}</div>
+                </div>
             </div>
-            <div>
-                <div class="product-title">${p.productName}</div>
-                <div class="product-price">₱${p.price.toFixed(2)}</div>
-            </div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
+}
+
+function getProductImagePath(productName) {
+    const name = productName.toLowerCase();
+
+    if (name.includes('cappuccino') || name.includes('cappucino')) return 'images/Cappucino.jpg';
+    if (name.includes('caramel')) return 'images/Caramel Macchiato.jpg';
+    if (name.includes('mocha')) return 'images/Iced Mocha.jpg';
+    if (name.includes('spanish')) return 'images/Iced-Spanish-Latte.jpg';
+    if (name.includes('decaf') || name.includes('decaffeinated')) return 'images/Decaf.jpg';
+
+    if (name.includes('matcha')) return 'images/Matcha Latte.jpg';
+    if (name.includes('strawberry')) return 'images/Strawberry Latte.jpg';
+    if (name.includes('taro')) return 'images/Taro Milk Drink.jpg';
+    if (name.includes('mango') || name.includes('refresca') || name.includes('passionfruit')) return 'images/Mango Passionfruit....jpg';
+
+    if (name.includes('hojicha')) return 'images/Hojicha.jpg';
+    if (name.includes('oreo')) return 'images/Oreo cake.jpg';
+    if (name.includes('black sugar')) return 'images/Black Sugar.jpg';
+    if (name.includes('blueberry')) return 'images/Blueberry.jpg';
+    if (name.includes('cake')) return 'images/Cake Milk Tea.jpg';
+
+    if (name.includes('fudge') || name.includes('cocoa') || name.includes('shake')) return 'images/Double fudge coco....jpg';
+    if (name.includes('hazelnut')) return 'images/Hazelnut Hot Choco.jpg';
+    if (name.includes('mint')) return 'images/Iced mint dark choco.jpg';
+    if (name.includes('dark chocolate') || name.includes('dark')) return 'images/Dark Chocolate.jpg';
+
+    return ''; 
 }
 
 function getCategoryBgClass(name, category) {
@@ -98,15 +162,26 @@ function getDrinkIcon(category) {
     return '☕';
 }
 
-/* MODAL FUNCTIONS */
 function openProductModal(productId) {
     const product = allProducts.find(p => p.productID === productId);
     if (!product) return;
 
-    selectedProductForModal = product;
+    const imagePath = getProductImagePath(product.productName);
+    const modalImg = document.getElementById("modal-img");
 
-    document.getElementById("modal-img").className = `modal-image ${getCategoryBgClass(product.productName, product.category)}`;
-    document.getElementById("modal-img").textContent = getDrinkIcon(product.category);
+    modalImg.className = `modal-image ${getCategoryBgClass(product.productName, product.category)}`;
+    
+    if (imagePath) {
+        modalImg.innerHTML = `
+            <img src="${imagePath}" 
+                 alt="${product.productName}" 
+                 style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;"
+                 onerror="this.onerror=null; this.parentNode.innerHTML='${getDrinkIcon(product.category)}';">
+        `;
+    } else {
+        modalImg.textContent = getDrinkIcon(product.category);
+    }
+
     document.getElementById("modal-title").textContent = product.productName;
     document.getElementById("modal-desc").textContent = product.description || "Freshly prepared handcrafted beverage.";
     document.getElementById("modal-price").textContent = `₱${product.price.toFixed(2)}`;
@@ -125,7 +200,6 @@ function closeModal(evt) {
     }
 }
 
-/* CART ACTIONS */
 function addToCart(productId) {
     const product = allProducts.find(p => p.productID === productId);
     if (!product) return;
@@ -195,6 +269,11 @@ function updateCart() {
 }
 
 async function payNow() {
+    if (!currentCustomerName) {
+        promptCustomerName();
+        return;
+    }
+
     if (cart.length === 0) {
         alert("Please add at least one product before checking out.");
         return;
@@ -204,7 +283,7 @@ async function payNow() {
     const totalAmount = subtotal * 1.12;
 
     const payload = {
-        customerID: 1,
+        customerName: currentCustomerName,
         employeeID: 1,
         totalAmount: totalAmount,
         items: cart.map(item => ({
@@ -223,7 +302,7 @@ async function payNow() {
 
         if (res.ok) {
             const result = await res.json();
-            alert(`🎉 Order #${result.orderId} placed successfully!`);
+            alert(`🎉 Order #${result.orderId} placed successfully for ${result.customerName}!`);
             cart = [];
             updateCart();
         } else {
@@ -232,5 +311,32 @@ async function payNow() {
         }
     } catch (err) {
         alert("Network error: Please verify C# API server is running.");
+    }
+}
+
+function showAboutModal() {
+    document.getElementById("info-modal-title").textContent = "About Campus Café ☕";
+    document.getElementById("info-modal-body").innerHTML = `
+        Campus Café is your ultimate study fuel spot on campus! We serve handcrafted espresso beverages, iced teas, and signature specialty drinks prepared fresh every day.<br><br>
+        <strong>Location:</strong> Student Activity Center, Ground Floor<br>
+        <strong>Hours:</strong> Mon - Sat: 7:00 AM - 8:00 PM
+    `;
+    document.getElementById("info-modal").style.display = "flex";
+}
+
+function showContactModal() {
+    document.getElementById("info-modal-title").textContent = "Contact Us 📞";
+    document.getElementById("info-modal-body").innerHTML = `
+        Need assistance with a bulk order or catering event?<br><br>
+        • <strong>Phone:</strong> (032) 123-4567 / 0917-123-4567<br>
+        • <strong>Email:</strong> support@campuscafe.edu.ph<br>
+        • <strong>Facebook / Instagram:</strong> @CampusCafeOfficial
+    `;
+    document.getElementById("info-modal").style.display = "flex";
+}
+
+function closeInfoModal(evt) {
+    if (!evt || evt.target.id === "info-modal" || evt.target.classList.contains("modal-close")) {
+        document.getElementById("info-modal").style.display = "none";
     }
 }

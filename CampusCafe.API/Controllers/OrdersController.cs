@@ -24,13 +24,47 @@ namespace CampusCafe.API.Controllers
             if (orderDto == null || orderDto.Items == null || orderDto.Items.Count == 0)
                 return BadRequest("Order items cannot be empty.");
 
+            if (string.IsNullOrWhiteSpace(orderDto.CustomerName))
+                return BadRequest("Customer name is required.");
+
             using (OleDbConnection conn = new OleDbConnection(connectionString))
             {
                 try
                 {
                     conn.Open();
 
-                    // 1. Get Next OrderID
+                    // 1. Sync Customer Name into Customer Table
+                    int customerId = 1;
+                    string cleanName = orderDto.CustomerName.Trim();
+
+                    using (OleDbCommand findCustCmd = new OleDbCommand("SELECT CustomerID FROM Customer WHERE CustomerName = ?", conn))
+                    {
+                        findCustCmd.Parameters.AddWithValue("?", cleanName);
+                        object existingId = findCustCmd.ExecuteScalar();
+
+                        if (existingId != null && existingId != DBNull.Value)
+                        {
+                            customerId = Convert.ToInt32(existingId);
+                        }
+                        else
+                        {
+                            using (OleDbCommand maxCustCmd = new OleDbCommand("SELECT MAX(CustomerID) FROM Customer", conn))
+                            {
+                                object maxRes = maxCustCmd.ExecuteScalar();
+                                customerId = (maxRes != null && maxRes != DBNull.Value) ? Convert.ToInt32(maxRes) + 1 : 1;
+                            }
+
+                            string insertCustQuery = "INSERT INTO Customer (CustomerID, CustomerName) VALUES (?, ?)";
+                            using (OleDbCommand insertCustCmd = new OleDbCommand(insertCustQuery, conn))
+                            {
+                                insertCustCmd.Parameters.AddWithValue("?", customerId);
+                                insertCustCmd.Parameters.AddWithValue("?", cleanName);
+                                insertCustCmd.ExecuteNonQuery();
+                            }
+                        }
+                    }
+
+                    // 2. Get Next OrderID
                     int nextOrderId = 1;
                     using (OleDbCommand maxCmd = new OleDbCommand("SELECT MAX(OrderID) FROM [Order]", conn))
                     {
@@ -38,23 +72,38 @@ namespace CampusCafe.API.Controllers
                         if (result != null && result != DBNull.Value) nextOrderId = Convert.ToInt32(result) + 1;
                     }
 
-                    int customerId = orderDto.CustomerID > 0 ? orderDto.CustomerID : 1;
                     int employeeId = orderDto.EmployeeID > 0 ? orderDto.EmployeeID : 1;
 
-                    // 2. Insert into Order Table
-                    string insertOrderQuery = "INSERT INTO [Order] (OrderID, CustomerID, EmployeeID, OrderDateTime, Status, TotalAmount) VALUES (?, ?, ?, ?, ?, ?)";
+                    // 3. Build summary string for ProductDetails column
+                    List<string> itemSummaries = new List<string>();
+                    foreach (var item in orderDto.Items)
+                    {
+                        string pName = "Product #" + item.ProductID;
+                        using (OleDbCommand pCmd = new OleDbCommand("SELECT ProductName FROM Product WHERE ProductID = ?", conn))
+                        {
+                            pCmd.Parameters.AddWithValue("?", item.ProductID);
+                            object res = pCmd.ExecuteScalar();
+                            if (res != null && res != DBNull.Value) pName = res.ToString();
+                        }
+                        itemSummaries.Add($"{pName} (x{item.Quantity})");
+                    }
+                    string productDetailsSummary = string.Join(", ", itemSummaries);
+
+                    // 4. Insert into [Order] table with linked CustomerID & ProductDetails
+                    string insertOrderQuery = "INSERT INTO [Order] (OrderID, CustomerID, EmployeeID, ProductDetails, OrderDateTime, Status, TotalAmount) VALUES (?, ?, ?, ?, ?, ?, ?)";
                     using (OleDbCommand cmd = new OleDbCommand(insertOrderQuery, conn))
                     {
                         cmd.Parameters.AddWithValue("?", nextOrderId);
                         cmd.Parameters.AddWithValue("?", customerId);
                         cmd.Parameters.AddWithValue("?", employeeId);
+                        cmd.Parameters.AddWithValue("?", productDetailsSummary);
                         cmd.Parameters.AddWithValue("?", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                         cmd.Parameters.AddWithValue("?", "Pending");
                         cmd.Parameters.AddWithValue("?", orderDto.TotalAmount);
                         cmd.ExecuteNonQuery();
                     }
 
-                    // 3. Insert into Order_Item Table
+                    // 5. Insert into Order_Item table
                     foreach (var item in orderDto.Items)
                     {
                         int nextOrderItemId = 1;
@@ -76,7 +125,7 @@ namespace CampusCafe.API.Controllers
                         }
                     }
 
-                    return Ok(new { message = "Order placed successfully!", orderId = nextOrderId });
+                    return Ok(new { message = "Order placed successfully!", orderId = nextOrderId, customerName = cleanName });
                 }
                 catch (Exception ex)
                 {
@@ -88,7 +137,7 @@ namespace CampusCafe.API.Controllers
 
     public class OrderCreateDto
     {
-        public int CustomerID { get; set; } = 1;
+        public string CustomerName { get; set; } = "Guest";
         public int EmployeeID { get; set; } = 1;
         public decimal TotalAmount { get; set; }
         public List<OrderItemDto> Items { get; set; } = new List<OrderItemDto>();
