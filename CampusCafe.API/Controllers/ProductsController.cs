@@ -28,7 +28,8 @@ namespace CampusCafe.API.Controllers
                 try
                 {
                     conn.Open();
-                    string query = "SELECT ProductID, ProductName, Description, Price, Category, AvailabilityStatus FROM Product";
+                    // products the manager removed ("Removed") are never listed again
+                    string query = "SELECT ProductID, ProductName, Description, Price, Category, AvailabilityStatus FROM Product WHERE AvailabilityStatus <> 'Removed'";
                     using (OleDbCommand cmd = new OleDbCommand(query, conn))
                     {
                         using (OleDbDataReader reader = cmd.ExecuteReader())
@@ -101,8 +102,10 @@ namespace CampusCafe.API.Controllers
         }
 
         // DELETE api/Products/5  -> the "Remove" button in the Menu Products tab
-        // A product that already appears in past orders cannot be deleted (it would break the
-        // order history), so in that case the API answers 409 and the page offers to mark it Unavailable.
+        // The product disappears from the menu completely (Management Board + Customer Kiosk).
+        //  - Never ordered before  -> the row is deleted from the database.
+        //  - Already in past orders -> Order_Item still points to it, so the row is kept (otherwise the
+        //    order history would break) but it is marked "Removed" and is never listed anywhere again.
         [HttpDelete("{id:int}")]
         public IActionResult DeleteProduct(int id)
         {
@@ -112,13 +115,14 @@ namespace CampusCafe.API.Controllers
                 {
                     conn.Open();
 
-                    if (!DbHelper.Exists(conn, null, "SELECT COUNT(*) FROM Product WHERE ProductID = ?", id))
+                    if (!DbHelper.Exists(conn, null, "SELECT COUNT(*) FROM Product WHERE ProductID = ? AND AvailabilityStatus <> 'Removed'", id))
                         return NotFound("Product not found.");
 
                     if (DbHelper.Exists(conn, null, "SELECT COUNT(*) FROM Order_Item WHERE ProductID = ?", id))
-                        return Conflict("This product appears in past orders, so it cannot be deleted.");
+                        DbHelper.NonQuery(conn, null, "UPDATE Product SET AvailabilityStatus = 'Removed' WHERE ProductID = ?", id);
+                    else
+                        DbHelper.NonQuery(conn, null, "DELETE FROM Product WHERE ProductID = ?", id);
 
-                    DbHelper.NonQuery(conn, null, "DELETE FROM Product WHERE ProductID = ?", id);
                     return Ok(new { message = "Product removed." });
                 }
                 catch (Exception ex)
@@ -133,18 +137,26 @@ namespace CampusCafe.API.Controllers
         {
             if (statusDto == null) return BadRequest("Invalid status data.");
 
+            string newStatus = (statusDto.AvailabilityStatus ?? "").Trim();
+            if (newStatus.Equals("Available", StringComparison.OrdinalIgnoreCase)) newStatus = "Available";
+            else if (newStatus.Equals("Unavailable", StringComparison.OrdinalIgnoreCase)) newStatus = "Unavailable";
+            else return BadRequest("Status must be Available or Unavailable.");
+
             using (OleDbConnection conn = new OleDbConnection(connectionString))
             {
                 try
                 {
                     conn.Open();
-                    string query = "UPDATE Product SET AvailabilityStatus = ? WHERE ProductID = ?";
+                    // a removed product can't be switched back on
+                    string query = "UPDATE Product SET AvailabilityStatus = ? WHERE ProductID = ? AND AvailabilityStatus <> 'Removed'";
+                    int changed;
                     using (OleDbCommand cmd = new OleDbCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("?", statusDto.AvailabilityStatus ?? "Available");
+                        cmd.Parameters.AddWithValue("?", newStatus);
                         cmd.Parameters.AddWithValue("?", id);
-                        cmd.ExecuteNonQuery();
+                        changed = cmd.ExecuteNonQuery();
                     }
+                    if (changed == 0) return NotFound("Product not found.");
                     return Ok(new { message = "Status updated successfully!" });
                 }
                 catch (Exception ex)

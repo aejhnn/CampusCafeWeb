@@ -15,6 +15,39 @@ namespace CampusCafe.API
         public const string FallbackConnection =
             @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\alcan\Downloads\Physical Data Model (GILO, PAMATIAN, VILLAFOR, VELASCO).accdb;";
 
+        /// <summary>Card types the kiosk / board can send. Value = short name saved in Payment.PaymentMethod (TEXT(20)).</summary>
+        public static readonly Dictionary<string, string> CardTypes = new(StringComparer.OrdinalIgnoreCase)
+        {
+            ["Visa"] = "Visa",
+            ["Mastercard"] = "Mastercard",
+            ["JCB"] = "JCB",
+            ["American Express"] = "Amex",
+            ["BDO"] = "BDO",
+            ["BPI"] = "BPI",
+            ["Metrobank"] = "Metrobank",
+            ["UnionBank"] = "UnionBank"
+        };
+
+        /// <summary>
+        /// Supplier / delivery payments accept Cash, Card (e.g. "Card (Visa)"), Bank Transfer and Check.
+        /// Returns the cleaned text to save, or null when the method is not allowed (GCash is no longer accepted).
+        /// </summary>
+        public static string? NormalizeBusinessPaymentMethod(string? raw)
+        {
+            string m = string.IsNullOrWhiteSpace(raw) ? "Cash" : raw.Trim();
+            foreach (var ok in new[] { "Cash", "Bank Transfer", "Check" })
+                if (m.Equals(ok, StringComparison.OrdinalIgnoreCase)) return ok;
+
+            if (m.Equals("Card", StringComparison.OrdinalIgnoreCase)) return "Card";
+            if (m.StartsWith("Card (", StringComparison.OrdinalIgnoreCase) && m.EndsWith(")"))
+            {
+                string inner = m.Substring(6, m.Length - 7);
+                foreach (var shortName in CardTypes.Values)
+                    if (inner.Equals(shortName, StringComparison.OrdinalIgnoreCase)) return $"Card ({shortName})";
+            }
+            return null;
+        }
+
         /// <summary>Column name -> OLE DB data type code. Empty when the table does not exist.</summary>
         public static Dictionary<string, int> GetColumns(OleDbConnection conn, string table)
         {
@@ -30,6 +63,24 @@ namespace CampusCafe.API
                 }
             }
             return map;
+        }
+
+        /// <summary>Max length of a text column (Access TEXT is usually 255). null = unlimited (Memo) or unknown.</summary>
+        public static int? GetTextLimit(OleDbConnection conn, string table, string column)
+        {
+            DataTable? schema = conn.GetOleDbSchemaTable(OleDbSchemaGuid.Columns, new object?[] { null, null, table, column });
+            if (schema == null || schema.Rows.Count == 0) return null;
+            object v = schema.Rows[0]["CHARACTER_MAXIMUM_LENGTH"];
+            if (v == DBNull.Value) return null;
+            long len = Convert.ToInt64(v);
+            return (len > 0 && len < 100000) ? (int)len : null;
+        }
+
+        /// <summary>Shortens text with "..." so it fits the column, instead of Access refusing the insert.</summary>
+        public static string FitText(string text, int? limit)
+        {
+            if (limit == null || text.Length <= limit.Value) return text;
+            return limit.Value <= 3 ? text.Substring(0, limit.Value) : text.Substring(0, limit.Value - 3) + "...";
         }
 
         public static void RequireTable(Dictionary<string, int> cols, string tableName)

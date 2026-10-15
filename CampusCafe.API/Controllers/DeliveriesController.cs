@@ -85,8 +85,9 @@ namespace CampusCafe.API.Controllers
                 return BadRequest("Every delivery item needs an ingredient (chosen or typed) and a whole-number quantity of 1 or more.");
             if (dto.AmountPaid <= 0) return BadRequest("Please enter the payment amount.");
 
-            string method = string.IsNullOrWhiteSpace(dto.PaymentMethod) ? "Cash" : dto.PaymentMethod.Trim();
-            if (method.Length > 20) method = method.Substring(0, 20);
+            string? method = DbHelper.NormalizeBusinessPaymentMethod(dto.PaymentMethod);
+            if (method == null)
+                return BadRequest("Unsupported payment method. Use Cash, Card, Bank Transfer or Check.");
 
             using (OleDbConnection conn = new OleDbConnection(connectionString))
             {
@@ -173,7 +174,7 @@ namespace CampusCafe.API.Controllers
             }
         }
 
-        // POST api/Deliveries/5/payments   body: { "amountPaid": 250.00, "paymentMethod": "GCash" }
+        // POST api/Deliveries/5/payments   body: { "amountPaid": 250.00, "paymentMethod": "Card (Visa)" }
         // Records one more payment (Delivery_Payment row) on a delivery that already exists -
         // e.g. when a delivery is paid in several instalments.
         [HttpPost("{id:int}/payments")]
@@ -182,8 +183,9 @@ namespace CampusCafe.API.Controllers
             if (dto == null) return BadRequest("Invalid payment data.");
             if (dto.AmountPaid <= 0) return BadRequest("Please enter the payment amount.");
 
-            string method = string.IsNullOrWhiteSpace(dto.PaymentMethod) ? "Cash" : dto.PaymentMethod.Trim();
-            if (method.Length > 20) method = method.Substring(0, 20);
+            string? method = DbHelper.NormalizeBusinessPaymentMethod(dto.PaymentMethod);
+            if (method == null)
+                return BadRequest("Unsupported payment method. Use Cash, Card, Bank Transfer or Check.");
 
             using (OleDbConnection conn = new OleDbConnection(connectionString))
             {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campus Café | Handcrafted Coffee & Brews</title>
+    <title>TARA KAPE | Handcrafted Coffee & Brews</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
         body { background-color: #f2f3f5; color: #111827; }
@@ -140,6 +140,7 @@
         .input-label { text-align: left; display: block; font-size: 12px; font-weight: 700; color: #475569; margin-top: 12px; margin-bottom: 4px; }
         .name-input-field, .select-input-field { width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid #cbd5e1; font-size: 15px; outline: none; background: #f8fafc; }
 
+        #pay-modal .modal-card { max-height: 94vh; overflow-y: auto; }
         .receipt-box { background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px; padding: 16px; text-align: left; margin: 16px 0 20px; font-size: 14px; }
         .receipt-row { display: flex; justify-content: space-between; margin-bottom: 8px; }
 
@@ -163,7 +164,7 @@
 
     <header class="site-header">
         <div class="header-container">
-            <a class="brand-logo" onclick="showLandingPage()">☕ CAMPUS CAFÉ <span>Online</span></a>
+            <a class="brand-logo" onclick="showLandingPage()">TARA KAPE <span>Online</span></a>
             <nav class="site-nav">
                 <a onclick="showLandingPage()" class="nav-link">Home</a>
                 <a onclick="showMenuDirectly()" class="nav-link">Menu</a>
@@ -175,7 +176,7 @@
     </header>
 
     <div id="landing-hero" class="landing-hero">
-        <h1>Welcome to Campus Café </h1>
+        <h1>Welcome to TARA KAPE </h1>
         <p>Freshly brewed espresso, ice-cold milk teas, and handcrafted specialty beverages made fresh daily on campus.</p>
         <button class="btn-start-order" onclick="startOrderingProcess()">Browse Menu</button>
     </div>
@@ -230,11 +231,11 @@
     <div id="name-modal" class="modal-overlay">
         <div class="modal-card">
             <button class="modal-close" onclick="closeNameModal()">✕</button>
-            <h3 class="modal-title">Welcome to Campus Café </h3>
+            <h3 class="modal-title">Welcome to TARA KAPE </h3>
             <p class="modal-desc">Please enter your order details to proceed:</p>
             
             <label class="input-label">Customer Name</label>
-            <input type="text" id="customer-name-input" class="name-input-field" placeholder="Example: Juan de la Cruz" onkeydown="if(event.key==='Enter') confirmCustomerName()">
+            <input type="text" id="customer-name-input" class="name-input-field" maxlength="100" placeholder="Example: Juan de la Cruz" onkeydown="if(event.key==='Enter') confirmCustomerName()">
 
             <label class="input-label">Customer Type</label>
             <select id="customer-type-input" class="select-input-field" onchange="onCustomerTypeChange()">
@@ -243,8 +244,14 @@
                 <option value="Guest">Guest / Visitor</option>
             </select>
 
-            <label class="input-label">University ID Number <span id="uni-id-optional" style="font-weight:400; color:#94a3b8; display:none;">(optional for guests)</span></label>
-            <input type="text" id="customer-uni-id-input" class="name-input-field" maxlength="30" placeholder="Example: 2023-00123" onkeydown="if(event.key==='Enter') confirmCustomerName()">
+            <div id="uni-id-group">
+                <label class="input-label">University ID Number</label>
+                <input type="text" id="customer-uni-id-input" class="name-input-field" maxlength="30"
+                       inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="Numbers only. Example: 202300123"
+                       oninput="onUniIdInput(this)" onkeydown="if(event.key==='Enter') confirmCustomerName()">
+                <div id="uni-id-hint" style="display:none; text-align:left; font-size:12px; font-weight:700; color:#dc2626; margin-top:4px;">Numbers only, no letters or symbols.</div>
+            </div>
+            <div id="guest-id-note" style="display:none; text-align:left; font-size:12px; color:#64748b; margin-top:12px;">Guests / visitors don't need a University ID number.</div>
 
             <button class="btn-add-modal" style="margin-top:20px;" onclick="confirmCustomerName()">Browse Menu</button>
         </div>
@@ -267,7 +274,6 @@
             <label class="input-label">Payment Method</label>
             <select id="pay-method" class="select-input-field" onchange="onPayMethodChange()">
                 <option value="Cash">Cash</option>
-                <option value="GCash">GCash</option>
                 <option value="Card">Card</option>
             </select>
             <div id="pay-tendered-group">
@@ -277,6 +283,7 @@
                     <span>Change:</span> <strong id="pay-change">₱0.00</strong>
                 </div>
             </div>
+            <div id="kiosk-card-box"></div>
             <div id="pay-error" style="display:none; color:#dc2626; font-size:13px; font-weight:700; margin-top:10px;"></div>
             <button id="pay-confirm-btn" class="btn-add-modal" style="margin-top:20px;" onclick="confirmPayment()">Confirm Payment</button>
         </div>
@@ -305,6 +312,7 @@
                 <div class="receipt-row"><span>Subtotal:</span> <span id="success-subtotal">₱0.00</span></div>
                 <div class="receipt-row"><span>Tax (12%):</span> <span id="success-tax">₱0.00</span></div>
                 <div class="receipt-row"><span>Payment Method:</span> <span id="success-method">-</span></div>
+                <div class="receipt-row" id="success-card-row" style="display:none;"><span>Card Number:</span> <span id="success-card-no">-</span></div>
                 <div id="success-change-rows">
                     <div class="receipt-row"><span>Cash Given:</span> <span id="success-tendered">₱0.00</span></div>
                     <div class="receipt-row"><span>Change:</span> <span id="success-change">₱0.00</span></div>
@@ -342,9 +350,10 @@
     </div>
 
     <footer class="site-footer">
-        © 2026 Campus Café. All rights reserved.
+        © 2026 TARA KAPE. All rights reserved.
     </footer>
 
+    <script src="card.js"></script>
     <script src="customer.js"></script>
 </body>
 </html>

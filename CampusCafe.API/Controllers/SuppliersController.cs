@@ -181,8 +181,9 @@ namespace CampusCafe.API.Controllers
                 return BadRequest("Please choose an ingredient or type its name.");
             if (dto.AmountPaid <= 0) return BadRequest("Please enter the payment amount.");
 
-            string method = string.IsNullOrWhiteSpace(dto.PaymentMethod) ? "Cash" : dto.PaymentMethod.Trim();
-            if (method.Length > 20) method = method.Substring(0, 20);
+            string? method = DbHelper.NormalizeBusinessPaymentMethod(dto.PaymentMethod);
+            if (method == null)
+                return BadRequest("Unsupported payment method. Use Cash, Card, Bank Transfer or Check.");
 
             using (OleDbConnection conn = new OleDbConnection(connectionString))
             {

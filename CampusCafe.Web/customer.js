@@ -37,26 +37,45 @@ function closeNameModal() {
     document.getElementById("name-modal").style.display = "none";
 }
 
-// University ID is optional for guests, required for students / faculty
+// University ID: numbers only. Guests / visitors don't need one, so the box is hidden for them.
 function onCustomerTypeChange() {
     const isGuest = document.getElementById("customer-type-input").value === "Guest";
-    document.getElementById("uni-id-optional").style.display = isGuest ? "inline" : "none";
-    document.getElementById("customer-uni-id-input").placeholder = isGuest ? "Leave empty if you are a guest" : "Example: 2023-00123";
+    document.getElementById("uni-id-group").style.display = isGuest ? "none" : "block";
+    document.getElementById("guest-id-note").style.display = isGuest ? "block" : "none";
+    if (isGuest) {
+        document.getElementById("customer-uni-id-input").value = "";
+        document.getElementById("uni-id-hint").style.display = "none";
+    }
+}
+
+// Removes anything that is not a digit (typing AND pasting)
+function onUniIdInput(input) {
+    const cleaned = input.value.replace(/\D/g, "");
+    document.getElementById("uni-id-hint").style.display = cleaned !== input.value ? "block" : "none";
+    if (cleaned !== input.value) input.value = cleaned;
 }
 
 function confirmCustomerName() {
     const nameInput = document.getElementById("customer-name-input").value.trim();
     const typeInput = document.getElementById("customer-type-input").value;
-    const uniIdInput = document.getElementById("customer-uni-id-input").value.trim();
+    // guests / visitors don't have a University ID
+    const uniIdInput = typeInput === "Guest" ? "" : document.getElementById("customer-uni-id-input").value.trim();
 
     if (!nameInput) {
         alert("Please enter a valid name to continue.");
         return;
     }
-    if (typeInput !== "Guest" && !uniIdInput) {
-        alert("Please enter your University ID number. (Only guests can leave it empty.)");
-        document.getElementById("customer-uni-id-input").focus();
-        return;
+    if (typeInput !== "Guest") {
+        if (!uniIdInput) {
+            alert("Please enter your University ID number.");
+            document.getElementById("customer-uni-id-input").focus();
+            return;
+        }
+        if (!/^\d+$/.test(uniIdInput)) {
+            alert("The University ID number can only contain numbers.");
+            document.getElementById("customer-uni-id-input").focus();
+            return;
+        }
     }
 
     currentCustomerName = nameInput;
@@ -88,7 +107,7 @@ async function loadProducts() {
 function isAvailable(status) {
     if (status === null || status === undefined) return true;
     const s = String(status).trim().toLowerCase();
-    return s !== 'unavailable' && s !== 'false' && s !== '0';
+    return s !== 'unavailable' && s !== 'removed' && s !== 'false' && s !== '0';
 }
 
 function filterCategory(category, evt) {
@@ -178,6 +197,8 @@ function getProductImagePath(productName) {
     if (name.includes('oolong')) return 'images/Oolong Tea.png';
     if (name.includes('honey')) return 'images/Honey Lemon Milk Tea.png';
     if (name.includes('classic')) return 'images/Classic Milk Tea.png';
+    if (name.includes('cheesecake')) return 'images/Cheescake Tea.png';
+    
     
     if (name.includes('kitkat')) return 'images/Iced Chocolate Shake with KitKat.png';
     if (name.includes('cocoa') || name.includes('shake')) return 'images/Double fudge cocoa shake.jpg';
@@ -351,6 +372,8 @@ function payNow() {
     document.getElementById("pay-tax").textContent = peso(tax);
     document.getElementById("pay-total").textContent = peso(total);
     document.getElementById("pay-method").value = "Cash";
+    CardForm.mount("kiosk");
+    CardForm.reset("kiosk");
     document.getElementById("pay-tendered").value = total.toFixed(2);
     document.getElementById("pay-error").style.display = "none";
     onPayMethodChange();
@@ -363,8 +386,10 @@ function closePayModal() {
 }
 
 function onPayMethodChange() {
-    const isCash = document.getElementById("pay-method").value === "Cash";
-    document.getElementById("pay-tendered-group").style.display = isCash ? "block" : "none";
+    const method = document.getElementById("pay-method").value;
+    document.getElementById("pay-tendered-group").style.display = method === "Cash" ? "block" : "none";
+    CardForm.toggle("kiosk", method === "Card");
+    document.getElementById("pay-error").style.display = "none";
     updatePayChange();
 }
 
@@ -391,6 +416,17 @@ async function confirmPayment() {
     }
     errBox.style.display = "none";
 
+    // Card: the customer must fill in ALL the card details first
+    let card = null;
+    if (method === "Card") {
+        card = CardForm.validate("kiosk");
+        if (!card.ok) {
+            errBox.textContent = card.error;
+            errBox.style.display = "block";
+            return;
+        }
+    }
+
     const payload = {
         customerName: currentCustomerName,
         customerType: currentCustomerType,
@@ -398,6 +434,8 @@ async function confirmPayment() {
         employeeID: 1,
         totalAmount: total,
         paymentMethod: method,
+        cardType: card ? card.type : "",
+        cardLast4: card ? card.last4 : "",
         amountTendered: given,
         items: cart.map(item => ({
             productID: item.productID,
@@ -438,6 +476,14 @@ async function confirmPayment() {
             document.getElementById("success-tax").textContent = peso(r.tax);
             document.getElementById("success-method").textContent = r.paymentMethod;
             document.getElementById("success-total-amount").textContent = peso(r.totalAmount);
+
+            const cardRow = document.getElementById("success-card-row");
+            if (r.cardLast4) {
+                document.getElementById("success-card-no").textContent = `•••• •••• •••• ${r.cardLast4}`;
+                cardRow.style.display = "flex";
+            } else {
+                cardRow.style.display = "none";
+            }
 
             const cashRows = document.getElementById("success-change-rows");
             if (r.paymentMethod.toLowerCase() === "cash") {

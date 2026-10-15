@@ -9,6 +9,22 @@ let allProducts = [];
 
 function el(id) { return document.getElementById(id); }
 
+// Payment method dropdowns (Supplier payment, Delivery payment, "+ Pay"):
+// choosing Card shows the card form; this returns the text to save (e.g. "Card (Visa)")
+// or null when the card details are not complete / not valid.
+function onBizMethodChange(prefix) {
+    const select = el(prefix === 'delivery-pay' ? 'delivery-pay-method' : `${prefix}-method`);
+    CardForm.toggle(prefix, select.value === 'Card');
+}
+
+function readBizPaymentMethod(prefix) {
+    const select = el(prefix === 'delivery-pay' ? 'delivery-pay-method' : `${prefix}-method`);
+    if (select.value !== 'Card') return select.value;
+    const card = CardForm.validate(prefix);
+    if (!card.ok) { alert(card.error); return null; }
+    return CardForm.methodLabel(prefix);
+}
+
 function esc(v) {
     return String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
@@ -183,6 +199,8 @@ function renderProducts(products) {
     if (teaContainer) teaContainer.innerHTML = "";
     if (chocolateContainer) chocolateContainer.innerHTML = "";
 
+    // products the manager removed are hidden completely
+    products = products.filter(p => String(p.availabilityStatus || '').trim().toLowerCase() !== 'removed');
     allProducts = products;
     products.forEach(p => {
         const category = (p.category || '').toLowerCase();
@@ -195,9 +213,11 @@ function renderProducts(products) {
                     <div style="font-size:12px; color:#64748b;">₱${p.price.toFixed(2)} - ${esc(p.description || 'No description')}</div>
                 </div>
                 <div class="stock-ctrl">
-                    <span style="font-size:11px; padding:3px 8px; border-radius:12px; background:${available ? '#d1fae5' : '#fee2e2'}; color:${available ? '#065f46' : '#991b1b'}; font-weight:700;">
+                    <button type="button" class="avail-toggle ${available ? 'is-on' : 'is-off'}"
+                            title="${available ? 'Click to mark as Unavailable' : 'Click to mark as Available'}"
+                            onclick="toggleAvailability(${Number(p.productID)}, this)">
                         ${available ? 'Available' : 'Unavailable'}
-                    </span>
+                    </button>
                     <button type="button" class="btn-remove" title="Remove this product from the menu"
                             onclick="removeProduct(${Number(p.productID)})">Remove</button>
                 </div>
@@ -254,30 +274,38 @@ async function addProduct(evt) {
     }
 }
 
-// "Remove" button next to each product in the Menu Products tab
+// Click the Available / Unavailable badge to switch it (like a toggle button)
+async function toggleAvailability(id, btn) {
+    const prod = allProducts.find(p => Number(p.productID) === id);
+    if (!prod) return;
+    const newStatus = isAvailable(prod.availabilityStatus) ? "Unavailable" : "Available";
+    if (btn) btn.disabled = true;
+
+    try {
+        const res = await fetch(`${API_URL}/Products/${id}/toggle-status`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ availabilityStatus: newStatus })
+        });
+        if (!res.ok) { alert(await readError(res)); if (btn) btn.disabled = false; return; }
+        showToast(`${prod.productName} is now ${newStatus}.`);
+        await loadProducts();
+    } catch (err) {
+        console.error("Error changing availability:", err);
+        alert("Network error: make sure the C# API is running.");
+        if (btn) btn.disabled = false;
+    }
+}
+
+// "Remove" button next to each product in the Menu Products tab.
+// The product disappears from the menu completely (Management Board AND Customer Kiosk).
 async function removeProduct(id) {
     const prod = allProducts.find(p => Number(p.productID) === id);
     const label = prod ? prod.productName : `#${id}`;
-    if (!confirm(`Remove "${label}" from the menu?\n\nThis deletes it from the database.`)) return;
+    if (!confirm(`Remove "${label}" from the menu?`)) return;
 
     try {
         const res = await fetch(`${API_URL}/Products/${id}`, { method: "DELETE" });
-
-        if (res.status === 409) {
-            // the product is part of past orders - it cannot be deleted, but it can be hidden from the kiosk
-            if (confirm(`"${label}" is part of past orders, so it cannot be deleted.\n\nMark it as Unavailable instead (it will no longer show as orderable)?`)) {
-                const r2 = await fetch(`${API_URL}/Products/${id}/toggle-status`, {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ availabilityStatus: "Unavailable" })
-                });
-                if (!r2.ok) { alert(await readError(r2)); return; }
-                showToast(`${label} marked as Unavailable.`);
-                await loadProducts();
-            }
-            return;
-        }
-
         if (!res.ok) { alert(await readError(res)); return; }
         showToast(`🗑️ ${label} removed from the menu.`);
         await loadProducts();
@@ -657,11 +685,12 @@ async function submitSupply(evt) {
     const supplierID = parseInt(el("supply-supplier").value);
     const ingredient = resolveTypedIngredient('supply');
     const amountPaid = parseFloat(el("supply-amount").value);
-    const paymentMethod = el("supply-method").value;
 
     if (!supplierID) { alert("Please choose a supplier."); return; }
     if (!ingredient) { alert("Please choose or type an ingredient."); return; }
     if (!(amountPaid > 0)) { alert("Please enter a payment amount greater than 0."); return; }
+    const paymentMethod = readBizPaymentMethod('supply');
+    if (!paymentMethod) return;
 
     try {
         const res = await fetch(`${API_URL}/Suppliers/supply`, {
@@ -684,6 +713,7 @@ async function submitSupply(evt) {
 
         const data = await res.json();
         el("supply-form").reset();
+        onBizMethodChange('supply');
         onIngredientTyped('supply');
         showSupplyReceipt(data);
         loadSupplyHistory();
@@ -856,7 +886,6 @@ async function submitDelivery(evt) {
 
     const supplierID = parseInt(el("delivery-supplier").value);
     const amountPaid = parseFloat(el("delivery-amount").value);
-    const paymentMethod = el("delivery-method").value;
 
     if (!supplierID) { alert("Please choose a supplier."); return; }
     if (deliveryLines.length === 0) { alert("Add at least one delivery item."); return; }
@@ -865,6 +894,8 @@ async function submitDelivery(evt) {
         alert("Every delivery quantity must be a whole number of 1 or more.");
         return;
     }
+    const paymentMethod = readBizPaymentMethod('delivery');
+    if (!paymentMethod) return;
 
     const payload = {
         supplierID,
@@ -893,6 +924,7 @@ async function submitDelivery(evt) {
         const delivery = await res.json();
 
         el("delivery-form").reset();
+        onBizMethodChange('delivery');
         deliveryLines = [];
         renderDeliveryLines();
         el("delivery-ingredient-options").innerHTML = "";
@@ -944,7 +976,7 @@ async function loadDeliveries() {
     }
 }
 
-// e.g. "Cash" or "Cash, GCash" when a delivery was paid in several payments
+// e.g. "Cash" or "Cash, Card (Visa)" when a delivery was paid in several payments
 function paymentMethodsOf(d) {
     const methods = [...new Set((d.payments || []).map(p => p.paymentMethod).filter(Boolean))];
     return methods.length ? methods.join(', ') : '-';
@@ -959,6 +991,9 @@ function openDeliveryPayment(id) {
     el("delivery-pay-title").textContent = `${d.receiptNumber} · ${d.supplierName} · paid so far ${peso(d.totalPaid)}`;
     el("delivery-pay-amount").value = "";
     el("delivery-pay-method").value = "Cash";
+    CardForm.mount("delivery-pay");
+    CardForm.reset("delivery-pay");
+    onBizMethodChange("delivery-pay");
     el("delivery-pay-modal").style.display = "flex";
     el("delivery-pay-amount").focus();
 }
@@ -972,9 +1007,10 @@ function closeDeliveryPayment(evt) {
 
 async function submitDeliveryPayment() {
     const amountPaid = parseFloat(el("delivery-pay-amount").value);
-    const paymentMethod = el("delivery-pay-method").value;
     if (!payingDeliveryId) return;
     if (!(amountPaid > 0)) { alert("Please enter a payment amount greater than 0."); return; }
+    const paymentMethod = readBizPaymentMethod('delivery-pay');
+    if (!paymentMethod) return;
 
     try {
         const res = await fetch(`${API_URL}/Deliveries/${payingDeliveryId}/payments`, {

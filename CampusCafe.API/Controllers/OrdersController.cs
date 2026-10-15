@@ -34,10 +34,13 @@ namespace CampusCafe.API.Controllers
             // University ID: optional for guests, required for students / faculty
             string universityId = (orderDto.UniversityID ?? "").Trim();
             bool isGuest = string.Equals((orderDto.CustomerType ?? "").Trim(), "Guest", StringComparison.OrdinalIgnoreCase);
+            if (isGuest) universityId = "";   // guests / visitors have no University ID
             if (universityId.Length > 30)
                 return BadRequest("University ID is too long (max 30 characters).");
             if (!isGuest && universityId.Length == 0)
-                return BadRequest("University ID is required for students and faculty (leave it empty only for guests).");
+                return BadRequest("University ID is required for students and faculty (only guests can skip it).");
+            if (!isGuest && !universityId.All(char.IsAsciiDigit))
+                return BadRequest("University ID can only contain numbers.");
 
             using (OleDbConnection conn = new OleDbConnection(connectionString))
             {
@@ -85,19 +88,42 @@ namespace CampusCafe.API.Controllers
                     decimal total = subtotal + tax;
 
                     // ---- payment rules ----
-                    string method = string.IsNullOrWhiteSpace(orderDto.PaymentMethod) ? "Cash" : orderDto.PaymentMethod.Trim();
-                    if (method.Length > 20) method = method.Substring(0, 20);
-                    bool isCash = method.Equals("Cash", StringComparison.OrdinalIgnoreCase);
+                    // Only Cash and Card are accepted. For Card the kiosk sends the card type + last 4 digits
+                    // (the full number / CVV never reach the server).
+                    string requested = string.IsNullOrWhiteSpace(orderDto.PaymentMethod) ? "Cash" : orderDto.PaymentMethod.Trim();
+                    string method;
+                    string cardLast4 = "";
+                    if (requested.Equals("Cash", StringComparison.OrdinalIgnoreCase))
+                    {
+                        method = "Cash";
+                    }
+                    else if (requested.Equals("Card", StringComparison.OrdinalIgnoreCase))
+                    {
+                        string cardType = (orderDto.CardType ?? "").Trim();
+                        if (!DbHelper.CardTypes.TryGetValue(cardType, out string? shortName))
+                            return BadRequest("Please choose the card type (Visa, Mastercard, BDO, BPI, ...).");
+                        cardLast4 = (orderDto.CardLast4 ?? "").Trim();
+                        if (cardLast4.Length != 4 || !cardLast4.All(char.IsAsciiDigit))
+                            return BadRequest("Card details are incomplete.");
+                        method = $"Card ({shortName})";
+                    }
+                    else
+                    {
+                        return BadRequest("Only Cash and Card payments are accepted.");
+                    }
+                    bool isCash = method == "Cash";
 
                     decimal tendered = orderDto.AmountTendered > 0 ? orderDto.AmountTendered : total;
                     if (isCash && tendered < total)
                         return BadRequest("The cash amount given is less than the total amount.");
                     decimal change = isCash ? tendered - total : 0m;
 
-                    string cleanName = orderDto.CustomerName.Trim();
+                    string cleanName = DbHelper.FitText(orderDto.CustomerName.Trim(), DbHelper.GetTextLimit(conn, "Customer", custCols.ContainsKey("CustomerName") ? "CustomerName" : "Name") ?? 100);
                     string customerType = string.IsNullOrWhiteSpace(orderDto.CustomerType) ? "Student" : orderDto.CustomerType.Trim();
                     int employeeId = orderDto.EmployeeID > 0 ? orderDto.EmployeeID : 1;
                     DateTime now = DbHelper.Now();
+
+                    int? detailsLimit = DbHelper.GetTextLimit(conn, "Order", "ProductDetails");   // read before the transaction starts
 
                     tx = conn.BeginTransaction();
 
@@ -160,6 +186,8 @@ namespace CampusCafe.API.Controllers
                     string dateCol = orderCols.ContainsKey("OrderDateTime") ? "OrderDateTime" : "OrderDate";
                     string totalCol = orderCols.ContainsKey("TotalAmount") ? "TotalAmount" : "Total";
                     string productSummary = string.Join(", ", lines.Select(l => $"{l.Name} (x{l.Quantity})"));
+                    // big orders make a long summary: fit it to the real size of the column (the full list is in Order_Item)
+                    productSummary = DbHelper.FitText(productSummary, detailsLimit);
 
                     int orderId = DbHelper.NextId(conn, tx, "Order", orderIdCol);
                     DbHelper.Insert(conn, tx, "Order", orderCols,
@@ -229,6 +257,7 @@ namespace CampusCafe.API.Controllers
                         receiptNumber,
                         receiptDate = DbHelper.Fmt(now),
                         paymentMethod = method,
+                        cardLast4,
                         subtotal,
                         tax,
                         totalAmount = total,
@@ -261,6 +290,8 @@ namespace CampusCafe.API.Controllers
         public decimal TotalAmount { get; set; }
         public string PaymentMethod { get; set; } = "Cash";
         public decimal AmountTendered { get; set; }
+        public string CardType { get; set; } = string.Empty;     // only when PaymentMethod = "Card"
+        public string CardLast4 { get; set; } = string.Empty;    // only when PaymentMethod = "Card"
         public List<OrderItemDto> Items { get; set; } = new List<OrderItemDto>();
     }
 
