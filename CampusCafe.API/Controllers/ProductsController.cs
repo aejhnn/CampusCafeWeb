@@ -100,6 +100,34 @@ namespace CampusCafe.API.Controllers
             }
         }
 
+        // DELETE api/Products/5  -> the "Remove" button in the Menu Products tab
+        // A product that already appears in past orders cannot be deleted (it would break the
+        // order history), so in that case the API answers 409 and the page offers to mark it Unavailable.
+        [HttpDelete("{id:int}")]
+        public IActionResult DeleteProduct(int id)
+        {
+            using (OleDbConnection conn = new OleDbConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+
+                    if (!DbHelper.Exists(conn, null, "SELECT COUNT(*) FROM Product WHERE ProductID = ?", id))
+                        return NotFound("Product not found.");
+
+                    if (DbHelper.Exists(conn, null, "SELECT COUNT(*) FROM Order_Item WHERE ProductID = ?", id))
+                        return Conflict("This product appears in past orders, so it cannot be deleted.");
+
+                    DbHelper.NonQuery(conn, null, "DELETE FROM Product WHERE ProductID = ?", id);
+                    return Ok(new { message = "Product removed." });
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500, $"Failed to remove product: {ex.Message}");
+                }
+            }
+        }
+
         [HttpPut("{id}/toggle-status")]
         public IActionResult ToggleStatus(int id, [FromBody] StatusUpdateDto statusDto)
         {

@@ -38,3 +38,203 @@ D:\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.pdb
 D:\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.genruntimeconfig.cache
 D:\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\ref\CampusCafe.API.dll
 D:\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.sourcelink.json
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\appsettings.Development.json
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.staticwebassets.endpoints.json
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\appsettings.json
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.exe
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.deps.json
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.runtimeconfig.json
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.dll
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.pdb
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\Microsoft.AspNetCore.OpenApi.dll
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\Microsoft.OpenApi.dll
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\System.Configuration.ConfigurationManager.dll
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\System.Data.OleDb.dll
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\System.Diagnostics.PerformanceCounter.dll
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\runtimes\win\lib\net8.0\System.Data.OleDb.dll
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\runtimes\win\lib\net8.0\System.Diagnostics.PerformanceCounter.dll
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.csproj.AssemblyReference.cache
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\rpswa.dswa.cache.json
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.AssemblyInfoInputs.cache
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.AssemblyInfo.cs
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.csproj.CoreCompileInputs.cache
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.sourcelink.json
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\rjimswa.dswa.cache.json
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\rjsmrazor.dswa.cache.json
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\rjsmcshtml.dswa.cache.json
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\scopedcss\bundle\CampusCafe.API.styles.css
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\staticwebassets.build.json
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\staticwebassets.build.json.cache
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\staticwebassets.development.json
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\staticwebassets.build.endpoints.json
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\swae.build.ex.cache
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCa.A09469C6.Up2Date
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.dll
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\refint\CampusCafe.API.dll
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.pdb
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.genruntimeconfig.cache
+C:\Users\karre\Downloads\CampusCafeWeb\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\ref\CampusCafe.API.dll
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\appsettings.Development.json
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.staticwebassets.endpoints.json
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\appsettings.json
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.exe
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.deps.json
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.runtimeconfig.json
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.dll
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.pdb
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\Microsoft.AspNetCore.OpenApi.dll
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\Microsoft.OpenApi.dll
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\System.Configuration.ConfigurationManager.dll
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\System.Data.OleDb.dll
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\System.Diagnostics.PerformanceCounter.dll
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\runtimes\win\lib\net8.0\System.Data.OleDb.dll
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\runtimes\win\lib\net8.0\System.Diagnostics.PerformanceCounter.dll
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.csproj.AssemblyReference.cache
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\rpswa.dswa.cache.json
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.AssemblyInfoInputs.cache
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.AssemblyInfo.cs
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.csproj.CoreCompileInputs.cache
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.sourcelink.json
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\rjimswa.dswa.cache.json
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\rjsmrazor.dswa.cache.json
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\rjsmcshtml.dswa.cache.json
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\scopedcss\bundle\CampusCafe.API.styles.css
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\staticwebassets.build.json
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\staticwebassets.build.json.cache
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\staticwebassets.development.json
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\staticwebassets.build.endpoints.json
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\swae.build.ex.cache
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCa.A09469C6.Up2Date
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.dll
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\refint\CampusCafe.API.dll
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.pdb
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.genruntimeconfig.cache
+C:\Users\karre\OneDrive\Documents\vince\.vscode\Kape\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\ref\CampusCafe.API.dll
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\appsettings.Development.json
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.staticwebassets.endpoints.json
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\appsettings.json
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.exe
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.deps.json
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.runtimeconfig.json
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.dll
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.pdb
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\Microsoft.AspNetCore.OpenApi.dll
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\Microsoft.OpenApi.dll
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\System.Configuration.ConfigurationManager.dll
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\System.Data.OleDb.dll
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\System.Diagnostics.PerformanceCounter.dll
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\runtimes\win\lib\net8.0\System.Data.OleDb.dll
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\runtimes\win\lib\net8.0\System.Diagnostics.PerformanceCounter.dll
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.csproj.AssemblyReference.cache
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\rpswa.dswa.cache.json
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.AssemblyInfoInputs.cache
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.AssemblyInfo.cs
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.csproj.CoreCompileInputs.cache
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.sourcelink.json
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\rjimswa.dswa.cache.json
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\rjsmrazor.dswa.cache.json
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\rjsmcshtml.dswa.cache.json
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\scopedcss\bundle\CampusCafe.API.styles.css
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\staticwebassets.build.json
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\staticwebassets.build.json.cache
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\staticwebassets.development.json
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\staticwebassets.build.endpoints.json
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\swae.build.ex.cache
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCa.A09469C6.Up2Date
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.dll
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\refint\CampusCafe.API.dll
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.pdb
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.genruntimeconfig.cache
+C:\Users\karre\Downloads\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\ref\CampusCafe.API.dll
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\appsettings.Development.json
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\appsettings.json
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.staticwebassets.endpoints.json
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.exe
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.deps.json
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.runtimeconfig.json
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.dll
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.pdb
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\Microsoft.AspNetCore.OpenApi.dll
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\Microsoft.OpenApi.dll
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\System.Configuration.ConfigurationManager.dll
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\System.Data.OleDb.dll
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\System.Diagnostics.PerformanceCounter.dll
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\runtimes\win\lib\net8.0\System.Data.OleDb.dll
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\runtimes\win\lib\net8.0\System.Diagnostics.PerformanceCounter.dll
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.csproj.AssemblyReference.cache
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\rpswa.dswa.cache.json
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.AssemblyInfoInputs.cache
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.AssemblyInfo.cs
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.csproj.CoreCompileInputs.cache
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.sourcelink.json
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\rjimswa.dswa.cache.json
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\rjsmrazor.dswa.cache.json
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\rjsmcshtml.dswa.cache.json
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\scopedcss\bundle\CampusCafe.API.styles.css
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\staticwebassets.build.json
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\staticwebassets.build.json.cache
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\staticwebassets.development.json
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\staticwebassets.build.endpoints.json
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\swae.build.ex.cache
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCa.A09469C6.Up2Date
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.dll
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\refint\CampusCafe.API.dll
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.pdb
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.genruntimeconfig.cache
+C:\Users\karre\Downloads\CampusCafe_pag_ganina_updated\CampusCafeWeb-full-updated (1)\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\ref\CampusCafe.API.dll
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\appsettings.Development.json
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\appsettings.json
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.staticwebassets.endpoints.json
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.exe
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.deps.json
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.runtimeconfig.json
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.dll
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\CampusCafe.API.pdb
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\Microsoft.AspNetCore.OpenApi.dll
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\Microsoft.OpenApi.dll
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\System.Configuration.ConfigurationManager.dll
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\System.Data.OleDb.dll
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\System.Diagnostics.PerformanceCounter.dll
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\runtimes\win\lib\net8.0\System.Data.OleDb.dll
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\bin\Debug\net10.0\runtimes\win\lib\net8.0\System.Diagnostics.PerformanceCounter.dll
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.csproj.AssemblyReference.cache
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\rpswa.dswa.cache.json
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.AssemblyInfoInputs.cache
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.AssemblyInfo.cs
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.csproj.CoreCompileInputs.cache
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.sourcelink.json
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\rjimswa.dswa.cache.json
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\rjsmrazor.dswa.cache.json
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\rjsmcshtml.dswa.cache.json
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\scopedcss\bundle\CampusCafe.API.styles.css
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\staticwebassets.build.json
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\staticwebassets.build.json.cache
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\staticwebassets.development.json
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\staticwebassets.build.endpoints.json
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\swae.build.ex.cache
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCa.A09469C6.Up2Date
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.dll
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\refint\CampusCafe.API.dll
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.pdb
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\CampusCafe.API.genruntimeconfig.cache
+C:\Users\karre\OneDrive\Documents\PROJECTS\CampusCafeWeb\CampusCafe.API\obj\Debug\net10.0\ref\CampusCafe.API.dll

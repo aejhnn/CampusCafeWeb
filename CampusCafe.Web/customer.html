@@ -175,9 +175,9 @@
     </header>
 
     <div id="landing-hero" class="landing-hero">
-        <h1>Welcome to Campus Café ☕</h1>
+        <h1>Welcome to Campus Café </h1>
         <p>Freshly brewed espresso, ice-cold milk teas, and handcrafted specialty beverages made fresh daily on campus.</p>
-        <button class="btn-start-order" onclick="startOrderingProcess()">Order Now</button>
+        <button class="btn-start-order" onclick="startOrderingProcess()">Browse Menu</button>
     </div>
 
     <div class="kiosk-container" id="menu-section">
@@ -211,7 +211,7 @@
 
             <div id="cart-body" class="order-body">
                 <div class="empty-cart-state">
-                    <div class="empty-cart-icon">🛍️</div>
+                    <div class="empty-cart-icon"></div>
                     <div class="empty-cart-title">Your order is empty</div>
                     <div class="empty-cart-sub">Select beverages from the menu to build your order</div>
                 </div>
@@ -230,20 +230,55 @@
     <div id="name-modal" class="modal-overlay">
         <div class="modal-card">
             <button class="modal-close" onclick="closeNameModal()">✕</button>
-            <h3 class="modal-title">Welcome to Campus Café ☕</h3>
+            <h3 class="modal-title">Welcome to Campus Café </h3>
             <p class="modal-desc">Please enter your order details to proceed:</p>
             
             <label class="input-label">Customer Name</label>
             <input type="text" id="customer-name-input" class="name-input-field" placeholder="Example: Juan de la Cruz" onkeydown="if(event.key==='Enter') confirmCustomerName()">
 
             <label class="input-label">Customer Type</label>
-            <select id="customer-type-input" class="select-input-field">
+            <select id="customer-type-input" class="select-input-field" onchange="onCustomerTypeChange()">
                 <option value="Student">Student</option>
                 <option value="Faculty">Faculty / Professor</option>
                 <option value="Guest">Guest / Visitor</option>
             </select>
 
+            <label class="input-label">University ID Number <span id="uni-id-optional" style="font-weight:400; color:#94a3b8; display:none;">(optional for guests)</span></label>
+            <input type="text" id="customer-uni-id-input" class="name-input-field" maxlength="30" placeholder="Example: 2023-00123" onkeydown="if(event.key==='Enter') confirmCustomerName()">
+
             <button class="btn-add-modal" style="margin-top:20px;" onclick="confirmCustomerName()">Browse Menu</button>
+        </div>
+    </div>
+
+    <!-- PAYMENT MODAL -->
+    <div id="pay-modal" class="modal-overlay">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closePayModal()">✕</button>
+            <h3 class="modal-title">Payment</h3>
+            <p class="modal-desc">Choose how you want to pay for your order.</p>
+            <div class="receipt-box">
+                <div class="receipt-row"><span>Items:</span> <span id="pay-item-count">0</span></div>
+                <div class="receipt-row"><span>Subtotal:</span> <span id="pay-subtotal">₱0.00</span></div>
+                <div class="receipt-row"><span>Tax (12%):</span> <span id="pay-tax">₱0.00</span></div>
+                <div class="receipt-row" style="font-size:18px; font-weight:800; color:#101c42; margin-bottom:0;">
+                    <span>Total to Pay:</span> <span id="pay-total">₱0.00</span>
+                </div>
+            </div>
+            <label class="input-label">Payment Method</label>
+            <select id="pay-method" class="select-input-field" onchange="onPayMethodChange()">
+                <option value="Cash">Cash</option>
+                <option value="GCash">GCash</option>
+                <option value="Card">Card</option>
+            </select>
+            <div id="pay-tendered-group">
+                <label class="input-label">Cash Given (₱)</label>
+                <input type="number" id="pay-tendered" class="name-input-field" step="0.01" min="0" oninput="updatePayChange()">
+                <div class="receipt-row" style="margin-top:10px; margin-bottom:0;">
+                    <span>Change:</span> <strong id="pay-change">₱0.00</strong>
+                </div>
+            </div>
+            <div id="pay-error" style="display:none; color:#dc2626; font-size:13px; font-weight:700; margin-top:10px;"></div>
+            <button id="pay-confirm-btn" class="btn-add-modal" style="margin-top:20px;" onclick="confirmPayment()">Confirm Payment</button>
         </div>
     </div>
 
@@ -255,20 +290,31 @@
                     <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
             </div>
-            <h3 class="modal-title">Order Confirmed!</h3>
-            <p class="modal-desc">Your order has been recorded successfully.</p>
+            <h3 class="modal-title">Payment Successful!</h3>
+            <p class="modal-desc">Your payment was received and your receipt has been created.</p>
             
             <div class="receipt-box">
+                <div class="receipt-row"><strong>Receipt No.:</strong> <span id="success-receipt-no">-</span></div>
+                <div class="receipt-row"><strong>Date:</strong> <span id="success-date">-</span></div>
                 <div class="receipt-row"><strong>Order Number:</strong> <span id="success-order-id">#0</span></div>
                 <div class="receipt-row"><strong>Customer Name:</strong> <span id="success-cust-name">-</span></div>
+                <div class="receipt-row" id="success-uni-row" style="display:none;"><strong>University ID:</strong> <span id="success-uni-id">-</span></div>
                 <div class="receipt-row"><strong>Items Ordered:</strong> <span id="success-item-count">0</span></div>
+                <div id="success-items-list" style="font-size:13px; color:#475569; margin-bottom:8px;"></div>
+                <hr style="margin: 10px 0; border: none; border-top: 1px dashed #cbd5e1;">
+                <div class="receipt-row"><span>Subtotal:</span> <span id="success-subtotal">₱0.00</span></div>
+                <div class="receipt-row"><span>Tax (12%):</span> <span id="success-tax">₱0.00</span></div>
+                <div class="receipt-row"><span>Payment Method:</span> <span id="success-method">-</span></div>
+                <div id="success-change-rows">
+                    <div class="receipt-row"><span>Cash Given:</span> <span id="success-tendered">₱0.00</span></div>
+                    <div class="receipt-row"><span>Change:</span> <span id="success-change">₱0.00</span></div>
+                </div>
                 <hr style="margin: 10px 0; border: none; border-top: 1px dashed #cbd5e1;">
                 <div class="receipt-row" style="font-size:16px; font-weight:800; color:#101c42;">
                     <span>Total Amount Paid:</span>
                     <span id="success-total-amount">₱0.00</span>
                 </div>
             </div>
-
             <button class="btn-add-modal" onclick="closeSuccessModal()">Place Another Order</button>
         </div>
     </div>

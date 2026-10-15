@@ -57,6 +57,62 @@
         
         .btn-login { width: 100%; background: #0f172a; color: white; border: none; padding: 14px; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 8px; }
         .auth-error { color: #dc2626; font-size: 13px; font-weight: 700; margin-top: 12px; display: none; background: #fef2f2; padding: 10px; border-radius: 8px; border: 1px solid #fecaca; line-height: 1.4; }
+
+        /* DELIVERY / SUPPLIER PAYMENT UI */
+        .two-col { display: grid; grid-template-columns: 430px 1fr; gap: 20px; align-items: start; }
+        .stack { display: flex; flex-direction: column; gap: 20px; }
+        .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .inline-row { display: flex; gap: 8px; align-items: flex-end; }
+        .inline-row .form-group { margin-bottom: 0; flex: 1; }
+        .btn-add { background: #0f766e; color: white; border: none; padding: 10px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+        .btn-small { background: #e2e8f0; color: #1e293b; border: none; padding: 6px 10px; border-radius: 6px; font-weight: 700; font-size: 12px; cursor: pointer; }
+        .btn-danger { background: #fee2e2; color: #991b1b; }
+        .btn-pay { width: 100%; background: #15803d; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 800; cursor: pointer; margin-top: 6px; }
+        .hint { font-size: 12px; color: #64748b; margin-top: 4px; }
+        .section-label { font-size: 12px; font-weight: 800; color: #475569; text-transform: uppercase; margin: 16px 0 6px; padding-top: 12px; border-top: 1px dashed #cbd5e1; }
+
+        /* PLUS / MINUS CONTROLS, ADD FORMS, TOAST */
+        .two-col.narrow { grid-template-columns: 320px 1fr; }
+        .stock-ctrl { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+        .btn-circle { width: 32px; height: 32px; border-radius: 50%; border: none; font-size: 18px; font-weight: 800; line-height: 1; cursor: pointer; color: white; display: inline-flex; align-items: center; justify-content: center; }
+        .btn-plus { background: #16a34a; }
+        .btn-minus { background: #dc2626; }
+        .btn-circle:hover { filter: brightness(1.1); }
+        .btn-circle:disabled { background: #cbd5e1; cursor: not-allowed; }
+        .amt-input { width: 60px; padding: 6px; border: 1px solid #cbd5e1; border-radius: 8px; text-align: center; font-size: 14px; }
+        .cell-input, .cell-select { padding: 7px 8px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; width: 100%; background: white; }
+        .btn-save { background: #1e293b; color: white; border: none; padding: 7px 12px; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; }
+        .btn-remove { background: #fee2e2; color: #991b1b; border: none; padding: 7px 12px; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; }
+        .btn-remove:disabled { background: #f1f5f9; color: #94a3b8; cursor: not-allowed; }
+        .status-unavailable { color: #991b1b; font-weight: bold; }
+        .status-low { color: #d97706; font-weight: bold; }
+        .status-available { color: #16a34a; font-weight: bold; }
+        .badge { font-size: 11px; padding: 3px 9px; border-radius: 12px; font-weight: 700; white-space: nowrap; }
+        .badge-full { background: #dbeafe; color: #1e40af; }
+        .badge-part { background: #fef3c7; color: #92400e; }
+        .summary-line { font-size: 13px; color: #64748b; margin: 2px 0 8px; }
+        .sync-note { font-size: 12px; background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; border-radius: 8px; padding: 8px 10px; margin: 10px 0; line-height: 1.5; }
+        #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #0f172a; color: white; padding: 12px 20px; border-radius: 10px; font-size: 14px; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.3); opacity: 0; pointer-events: none; transition: all 0.25s ease; z-index: 10000; max-width: 90%; }
+        #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        #toast.error { background: #b91c1c; }
+        @media (max-width: 1000px) { .two-col, .two-col.narrow { grid-template-columns: 1fr; } }
+
+        /* RECEIPT MODAL */
+        .receipt-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.75); display: none; justify-content: center; align-items: center; z-index: 9998; }
+        .receipt-card { background: white; border-radius: 14px; padding: 28px; width: 420px; max-width: 94%; max-height: 92vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); }
+        .receipt-title { text-align: center; font-size: 20px; font-weight: 800; }
+        .receipt-sub { text-align: center; font-size: 12px; color: #64748b; margin-bottom: 12px; }
+        .receipt-line { display: flex; justify-content: space-between; font-size: 14px; margin: 6px 0; gap: 12px; }
+        .receipt-divider { border: none; border-top: 1px dashed #94a3b8; margin: 12px 0; }
+        .receipt-total { font-size: 17px; font-weight: 800; }
+        .receipt-actions { display: flex; gap: 8px; margin-top: 18px; }
+        .receipt-actions button { flex: 1; padding: 10px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; }
+        @media print {
+            body > *:not(#receipt-modal) { display: none !important; }
+            #receipt-modal { position: static; background: none; display: block !important; }
+            .receipt-card { box-shadow: none; width: 100%; max-height: none; }
+            .no-print { display: none !important; }
+        }
     </style>
 </head>
 <body>
@@ -99,7 +155,8 @@
         <button class="tab-btn active" onclick="switchTab('products', event)">📋 Menu Products</button>
         <button class="tab-btn" onclick="switchTab('ingredients', event)">📦 Ingredients & Stock</button>
         <button class="tab-btn" onclick="switchTab('employees', event)">👥 Employees</button>
-        <button class="tab-btn" onclick="switchTab('suppliers', event)">🚚 Supplier & Delivery</button>
+        <button class="tab-btn" onclick="switchTab('suppliers', event)">🏭 Suppliers</button>
+        <button class="tab-btn" onclick="switchTab('deliveries', event)">🚚 Deliveries</button>
     </div>
 
     <!-- MODULE 1: PRODUCTS -->
@@ -139,22 +196,22 @@
 
             <div>
                 <div class="category-box">
-                    <div class="category-header">☕ COFFEE</div>
+                    <div class="category-header">COFFEE</div>
                     <div id="coffee-products">Loading...</div>
                 </div>
                 <div class="category-box">
-                    <div class="category-header">🧋 TEA & MILK TEA</div>
+                    <div class="category-header">TEA & MILK TEA</div>
                     <div id="tea-products">Loading...</div>
                 </div>
             </div>
 
             <div>
                 <div class="category-box">
-                    <div class="category-header">🥤 NON-COFFEE</div>
+                    <div class="category-header">NON-COFFEE</div>
                     <div id="non-coffee-products">Loading...</div>
                 </div>
                 <div class="category-box">
-                    <div class="category-header">🍫 CHOCOLATE</div>
+                    <div class="category-header">CHOCOLATE</div>
                     <div id="chocolate-products">Loading...</div>
                 </div>
             </div>
@@ -163,48 +220,298 @@
 
     <!-- MODULE 2: INGREDIENTS -->
     <div id="mod-ingredients" class="module-section">
-        <div class="admin-card">
-            <h3>Inventory & Stock Control</h3>
-            <table>
-                <thead>
-                    <tr><th>ID</th><th>Ingredient Name</th><th>Stock Qty</th><th>Unit</th><th>Status</th></tr>
-                </thead>
-                <tbody id="ingredients-table-body">
-                    <tr><td colspan="5">Loading inventory data...</td></tr>
-                </tbody>
-            </table>
+        <div class="two-col narrow">
+            <div class="admin-card">
+                <h3>+ Add Ingredient</h3>
+                <form id="ingredient-form" onsubmit="addIngredient(event)">
+                    <div class="form-group">
+                        <label>Ingredient Name</label>
+                        <input type="text" id="ingredient-name" maxlength="100" required placeholder="e.g. Brown Sugar">
+                    </div>
+                    <div class="row-2">
+                        <div class="form-group">
+                            <label>Unit</label>
+                            <input type="text" id="ingredient-unit" list="unit-options" maxlength="30" value="pcs" required>
+                            <datalist id="unit-options">
+                                <option value="pcs"></option><option value="kg"></option><option value="g"></option>
+                                <option value="L"></option><option value="ml"></option><option value="Bags"></option>
+                                <option value="Bottles"></option><option value="Cans"></option><option value="Packs"></option>
+                                <option value="Boxes"></option>
+                            </datalist>
+                        </div>
+                        <div class="form-group">
+                            <label>Starting Qty</label>
+                            <input type="number" id="ingredient-qty" step="1" min="0" value="0" inputmode="numeric" onkeydown="blockDecimalKeys(event)" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit">＋ Add Ingredient</button>
+                    <div class="hint">Whole numbers only. Use the <b>+</b> / <b>−</b> buttons in the table to add or subtract stock later.</div>
+                </form>
+            </div>
+
+            <div class="admin-card">
+                <h3>Inventory & Stock Control</h3>
+                <div class="ingredient-search" style="display:flex; gap:8px; align-items:center; margin:4px 0 16px;">
+                    <input type="text" id="ingredient-search" autocomplete="off"
+                           placeholder="🔍 Search ingredient by name, ID, unit or status (e.g. milk, kg, low stock)"
+                           oninput="searchIngredients()"
+                           onkeydown="if (event.key === 'Escape') { clearIngredientSearch(); }"
+                           style="flex:1; padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:14px;">
+                    <button type="button" onclick="clearIngredientSearch()"
+                            style="background:#e2e8f0; color:#1e293b; border:none; padding:10px 14px; border-radius:8px; font-weight:700; cursor:pointer;">Clear</button>
+                    <span id="ingredient-search-count" style="font-size:13px; color:#64748b; white-space:nowrap;"></span>
+                </div>
+                <div style="overflow-x:auto;">
+                <table>
+                    <thead>
+                        <tr><th>ID</th><th>Ingredient Name</th><th>Stock Qty</th><th>Unit</th><th>Status</th><th>Add / Subtract</th></tr>
+                    </thead>
+                    <tbody id="ingredients-table-body">
+                        <tr><td colspan="6">Loading inventory data...</td></tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- MODULE 3: EMPLOYEES -->
     <div id="mod-employees" class="module-section">
-        <div class="admin-card">
-            <h3>Staff & Employees</h3>
-            <table>
-                <thead>
-                    <tr><th>ID</th><th>Full Name</th><th>Role / Position</th><th>Contact Number</th></tr>
-                </thead>
-                <tbody id="employees-table-body">
-                    <tr><td colspan="4">Loading employee data...</td></tr>
-                </tbody>
-            </table>
+        <div class="two-col narrow">
+            <div class="admin-card">
+                <h3>+ Add Employee</h3>
+                <form id="employee-form" onsubmit="addEmployee(event)">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="employee-name" maxlength="50" required placeholder="e.g. Maria Santos">
+                    </div>
+                    <div class="form-group">
+                        <label>Contact Number</label>
+                        <input type="text" id="employee-contact" maxlength="50" placeholder="e.g. 09123456789">
+                    </div>
+                    <div class="form-group">
+                        <label>Role / Position</label>
+                        <input type="text" id="employee-position" list="role-options" maxlength="50" required placeholder="e.g. Barista">
+                        <datalist id="role-options">
+                            <option value="Manager"></option><option value="Supervisor"></option><option value="Barista"></option>
+                            <option value="Cashier"></option><option value="Kitchen Staff"></option><option value="Stock Clerk"></option>
+                            <option value="Server"></option><option value="Staff"></option>
+                        </datalist>
+                    </div>
+                    <div class="form-group">
+                        <label>Work Schedule</label>
+                        <select id="employee-schedule" required>
+                            <option value="Full-Time">Full-Time</option>
+                            <option value="Part-Time">Part-Time</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-submit">＋ Add Employee</button>
+                </form>
+            </div>
+
+            <div class="admin-card">
+                <h3>Staff & Employees</h3>
+                <div id="employee-summary" class="summary-line"></div>
+                <div style="overflow-x:auto;">
+                <table>
+                    <thead>
+                        <tr><th>ID</th><th>Full Name</th><th>Role / Position</th><th>Schedule</th><th>Contact Number</th><th>Actions</th></tr>
+                    </thead>
+                    <tbody id="employees-table-body">
+                        <tr><td colspan="6">Loading employee data...</td></tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="hint">Change a role or schedule, then press <b>Save</b>. Use <b>− Remove</b> to delete an employee (employees linked to past orders are kept).</div>
+            </div>
         </div>
     </div>
 
-    <!-- MODULE 4: SUPPLIERS -->
+    <!-- MODULE 4: SUPPLIERS (supplier_ingredient + supplier_payment + supplier_receipt) -->
     <div id="mod-suppliers" class="module-section">
-        <div class="admin-card">
-            <h3>Suppliers & Delivery</h3>
-            <table>
-                <thead>
-                    <tr><th>ID</th><th>Supplier Name</th><th>Contact Person</th><th>Phone Number</th></tr>
-                </thead>
-                <tbody id="suppliers-table-body">
-                    <tr><td colspan="4">Loading supplier data...</td></tr>
-                </tbody>
-            </table>
+        <div class="two-col">
+            <div class="admin-card">
+                <h3>+ Supply Order & Payment</h3>
+                <form id="supply-form" onsubmit="submitSupply(event)">
+                    <div class="form-group">
+                        <label>Supplier</label>
+                        <select id="supply-supplier" required>
+                            <option value="">Loading suppliers...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Ingredient needed from this supplier</label>
+                        <input type="text" id="supply-ingredient" list="supply-ingredient-options" maxlength="100"
+                               autocomplete="off" required placeholder="Pick from the list or type a new ingredient"
+                               oninput="onIngredientTyped('supply')">
+                        <datalist id="supply-ingredient-options"></datalist>
+                        <div class="hint" id="supply-ingredient-hint">Not in the list? Just type the name - it will be added as a new ingredient. If the supplier is not yet linked to the ingredient, the link is saved automatically.</div>
+                    </div>
+                    <div class="form-group" id="supply-unit-row" style="display:none;">
+                        <label>Unit for the new ingredient</label>
+                        <input type="text" id="supply-unit" list="unit-options" maxlength="30" value="pcs">
+                    </div>
+
+                    <div class="section-label">Payment</div>
+                    <div class="row-2">
+                        <div class="form-group">
+                            <label>Amount Paid (PHP)</label>
+                            <input type="number" step="0.01" min="0.01" id="supply-amount" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Payment Method</label>
+                            <select id="supply-method">
+                                <option value="Cash">Cash</option>
+                                <option value="GCash">GCash</option>
+                                <option value="Bank Transfer">Bank Transfer</option>
+                                <option value="Check">Check</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-pay">💳 Pay & Create Receipt</button>
+                </form>
+            </div>
+
+            <div class="stack">
+                <div class="admin-card">
+                    <h3>Suppliers</h3>
+                    <table>
+                        <thead>
+                            <tr><th>ID</th><th>Supplier Name</th><th>Contact Person</th><th>Phone Number</th></tr>
+                        </thead>
+                        <tbody id="suppliers-table-body">
+                            <tr><td colspan="4">Loading supplier data...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="admin-card">
+                    <h3>Supplier Receipts</h3>
+                    <table>
+                        <thead>
+                            <tr><th>Receipt No.</th><th>Supplier</th><th>Date</th><th>Total Paid</th><th></th></tr>
+                        </thead>
+                        <tbody id="supply-history-body">
+                            <tr><td colspan="5">Loading receipts...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- MODULE 5: DELIVERIES (delivery_item + delivery_payment + delivery_receipt) -->
+    <div id="mod-deliveries" class="module-section">
+        <div class="two-col">
+            <div class="admin-card">
+                <h3>+ New Delivery</h3>
+                <form id="delivery-form" onsubmit="submitDelivery(event)">
+                    <div class="form-group">
+                        <label>Supplier</label>
+                        <select id="delivery-supplier" onchange="onDeliverySupplierChange()" required>
+                            <option value="">Loading suppliers...</option>
+                        </select>
+                    </div>
+
+                    <div class="section-label">Delivery Items</div>
+                    <div class="inline-row">
+                        <div class="form-group" style="flex:2;">
+                            <label>Ingredient</label>
+                            <input type="text" id="delivery-ingredient" list="delivery-ingredient-options" maxlength="100"
+                                   autocomplete="off" placeholder="Pick or type an ingredient"
+                                   oninput="onIngredientTyped('delivery')">
+                            <datalist id="delivery-ingredient-options"></datalist>
+                        </div>
+                        <div class="form-group">
+                            <label>Quantity (whole number)</label>
+                            <input type="number" step="1" min="1" inputmode="numeric" id="delivery-qty" placeholder="0"
+                                   onkeydown="blockDecimalKeys(event)" onkeypress="if(event.key==='Enter'){event.preventDefault();addDeliveryLine();}">
+                        </div>
+                        <button type="button" class="btn-add" onclick="addDeliveryLine()">Add</button>
+                    </div>
+                    <div class="form-group" id="delivery-unit-row" style="display:none; margin-top:8px;">
+                        <label>Unit for the new ingredient</label>
+                        <input type="text" id="delivery-unit" list="unit-options" maxlength="30" value="pcs">
+                    </div>
+                    <div class="hint" id="delivery-ingredient-hint"></div>
+
+                    <table style="margin-top:12px;">
+                        <thead><tr><th>Ingredient</th><th>Qty</th><th></th></tr></thead>
+                        <tbody id="delivery-lines-body">
+                            <tr><td colspan="3" style="color:#94a3b8;">No items added yet.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <div class="section-label">Payment</div>
+                    <div class="row-2">
+                        <div class="form-group">
+                            <label>Amount Paid (PHP)</label>
+                            <input type="number" step="0.01" min="0.01" id="delivery-amount" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Payment Method</label>
+                            <select id="delivery-method">
+                                <option value="Cash">Cash</option>
+                                <option value="GCash">GCash</option>
+                                <option value="Bank Transfer">Bank Transfer</option>
+                                <option value="Check">Check</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-pay">💳 Pay & Create Receipt</button>
+                </form>
+            </div>
+
+            <div class="admin-card">
+                <h3>Delivery Receipts</h3>
+                <table>
+                    <thead>
+                        <tr><th>Receipt No.</th><th>Supplier</th><th>Date</th><th>Items</th><th>Payment</th><th>Total Paid</th><th></th></tr>
+                    </thead>
+                    <tbody id="deliveries-table-body">
+                        <tr><td colspan="7">Loading deliveries...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- RECEIPT MODAL (shared by deliveries and supplier payments) -->
+    <div id="receipt-modal" class="receipt-overlay" onclick="closeReceipt(event)">
+        <div class="receipt-card" onclick="event.stopPropagation()">
+            <div id="receipt-content"></div>
+            <div class="receipt-actions no-print">
+                <button style="background:#1e293b; color:white;" onclick="window.print()">🖨️ Print</button>
+                <button style="background:#e2e8f0; color:#1e293b;" onclick="closeReceipt()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD PAYMENT TO A DELIVERY -->
+    <div id="delivery-pay-modal" class="receipt-overlay" onclick="closeDeliveryPayment(event)">
+        <div class="receipt-card" onclick="event.stopPropagation()">
+            <div class="receipt-title">💳 Delivery Payment</div>
+            <div class="receipt-sub" id="delivery-pay-title"></div>
+            <div class="form-group">
+                <label>Amount Paid (PHP)</label>
+                <input type="number" step="0.01" min="0.01" id="delivery-pay-amount">
+            </div>
+            <div class="form-group">
+                <label>Payment Method</label>
+                <select id="delivery-pay-method">
+                    <option value="Cash">Cash</option>
+                    <option value="GCash">GCash</option>
+                    <option value="Bank Transfer">Bank Transfer</option>
+                    <option value="Check">Check</option>
+                </select>
+            </div>
+            <div class="receipt-actions">
+                <button style="background:#15803d; color:white;" onclick="submitDeliveryPayment()">Save Payment</button>
+                <button style="background:#e2e8f0; color:#1e293b;" onclick="closeDeliveryPayment()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast"></div>
 
     <script src="app.js"></script>
 </body>

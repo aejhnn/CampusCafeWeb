@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CampusCafe.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4cc9ea351d5da5009abcd7ed9a113d51e239fdd3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+569935b4c8c047f760ba878de449bd1931554a17")]
 [assembly: System.Reflection.AssemblyProductAttribute("CampusCafe.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CampusCafe.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

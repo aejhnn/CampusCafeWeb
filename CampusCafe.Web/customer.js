@@ -1,10 +1,11 @@
-const API_URL = "http://localhost:5005/api";
+const API_URL = "http://localhost:5098/api";
 
 let allProducts = [];
 let cart = [];
 let currentCategory = "All";
 let currentCustomerName = "";
 let currentCustomerType = "Student";
+let currentUniversityId = "";
 
 document.addEventListener("DOMContentLoaded", () => {
     loadProducts();
@@ -36,19 +37,34 @@ function closeNameModal() {
     document.getElementById("name-modal").style.display = "none";
 }
 
+// University ID is optional for guests, required for students / faculty
+function onCustomerTypeChange() {
+    const isGuest = document.getElementById("customer-type-input").value === "Guest";
+    document.getElementById("uni-id-optional").style.display = isGuest ? "inline" : "none";
+    document.getElementById("customer-uni-id-input").placeholder = isGuest ? "Leave empty if you are a guest" : "Example: 2023-00123";
+}
+
 function confirmCustomerName() {
     const nameInput = document.getElementById("customer-name-input").value.trim();
     const typeInput = document.getElementById("customer-type-input").value;
+    const uniIdInput = document.getElementById("customer-uni-id-input").value.trim();
 
     if (!nameInput) {
         alert("Please enter a valid name to continue.");
         return;
     }
+    if (typeInput !== "Guest" && !uniIdInput) {
+        alert("Please enter your University ID number. (Only guests can leave it empty.)");
+        document.getElementById("customer-uni-id-input").focus();
+        return;
+    }
 
     currentCustomerName = nameInput;
     currentCustomerType = typeInput;
+    currentUniversityId = uniIdInput;
 
-    document.getElementById("customer-display-name").textContent = `${currentCustomerName} (${currentCustomerType})`;
+    document.getElementById("customer-display-name").textContent =
+        `${currentCustomerName} (${currentCustomerType}${currentUniversityId ? ' · ' + currentUniversityId : ''})`;
     document.getElementById("name-modal").style.display = "none";
     
     document.getElementById("landing-hero").style.display = "none";
@@ -141,22 +157,35 @@ function getProductImagePath(productName) {
     if (name.includes('mocha')) return 'images/Iced Mocha.jpg';
     if (name.includes('spanish')) return 'images/Iced-Spanish-Latte.jpg';
     if (name.includes('decaf') || name.includes('decaffeinated')) return 'images/Decaf.jpg';
-
+    if (name.includes('americano')) return 'images/Americano.png';
+    if (name.includes('maple')) return 'images/Maple Latte.png';
+    if (name.includes('chai')) return 'images/Chai Latte.png';
+    if (name.includes('vietnamese')) return 'images/Vietnamese Latte.png';
+    
+    if (name.includes('smoothie')) return 'images/Chai Latte.png';
     if (name.includes('matcha')) return 'images/Matcha Latte.jpg';
     if (name.includes('strawberry')) return 'images/Strawberry Latte.jpg';
     if (name.includes('taro')) return 'images/Taro Milk Drink.jpg';
-    if (name.includes('mango') || name.includes('refresca') || name.includes('passionfruit')) return 'images/Mango Passionfruit....jpg';
-
+    if (name.includes('mango') || name.includes('refresca') || name.includes('passionfruit')) return 'images/Mango Passionfruit Refresca.jpg';
+    if (name.includes('mango')) return 'images/Mango Smoothie.png';
+    
+    if (name.includes('wintermelon')) return 'images/Wintermelon Milk Tea.png';
     if (name.includes('hojicha')) return 'images/Hojicha.jpg';
     if (name.includes('oreo')) return 'images/Oreo cake.jpg';
     if (name.includes('black sugar')) return 'images/Black Sugar.jpg';
     if (name.includes('blueberry')) return 'images/Blueberry.jpg';
     if (name.includes('cake')) return 'images/Cake Milk Tea.jpg';
-
-    if (name.includes('fudge') || name.includes('cocoa') || name.includes('shake')) return 'images/Double fudge coco....jpg';
+    if (name.includes('oolong')) return 'images/Oolong Tea.png';
+    if (name.includes('honey')) return 'images/Honey Lemon Milk Tea.png';
+    if (name.includes('classic')) return 'images/Classic Milk Tea.png';
+    
+    if (name.includes('kitkat')) return 'images/Iced Chocolate Shake with KitKat.png';
+    if (name.includes('cocoa') || name.includes('shake')) return 'images/Double fudge cocoa shake.jpg';
     if (name.includes('hazelnut')) return 'images/Hazelnut Hot Choco.jpg';
     if (name.includes('mint')) return 'images/Iced mint dark choco.jpg';
     if (name.includes('dark chocolate') || name.includes('dark')) return 'images/Dark Chocolate.jpg';
+    if (name.includes('hot chocolate')) return 'images/Hot Chocolate.png';
+    if (name.includes('cookies')) return 'images/Cookies n Cream.png';
 
     return ''; 
 }
@@ -293,7 +322,19 @@ function updateCart() {
     document.getElementById("total-val").textContent = `₱${total.toFixed(2)}`;
 }
 
-async function payNow() {
+function peso(n) {
+    return '₱' + Number(n || 0).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function getCartTotals() {
+    const subtotal = Math.round(cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 100) / 100;
+    const tax = Math.round(subtotal * 0.12 * 100) / 100;
+    const total = Math.round((subtotal + tax) * 100) / 100;
+    return { subtotal, tax, total };
+}
+
+// Step 1: PAY NOW opens the payment window
+function payNow() {
     if (!currentCustomerName) {
         promptCustomerName();
         return;
@@ -304,20 +345,69 @@ async function payNow() {
         return;
     }
 
-    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const totalAmount = subtotal * 1.12;
+    const { subtotal, tax, total } = getCartTotals();
+    document.getElementById("pay-item-count").textContent = cart.reduce((a, b) => a + b.quantity, 0);
+    document.getElementById("pay-subtotal").textContent = peso(subtotal);
+    document.getElementById("pay-tax").textContent = peso(tax);
+    document.getElementById("pay-total").textContent = peso(total);
+    document.getElementById("pay-method").value = "Cash";
+    document.getElementById("pay-tendered").value = total.toFixed(2);
+    document.getElementById("pay-error").style.display = "none";
+    onPayMethodChange();
+
+    document.getElementById("pay-modal").style.display = "flex";
+}
+
+function closePayModal() {
+    document.getElementById("pay-modal").style.display = "none";
+}
+
+function onPayMethodChange() {
+    const isCash = document.getElementById("pay-method").value === "Cash";
+    document.getElementById("pay-tendered-group").style.display = isCash ? "block" : "none";
+    updatePayChange();
+}
+
+function updatePayChange() {
+    const { total } = getCartTotals();
+    const given = parseFloat(document.getElementById("pay-tendered").value) || 0;
+    const change = Math.max(0, given - total);
+    document.getElementById("pay-change").textContent = peso(change);
+}
+
+// Step 2: confirm -> saves Order, Order_Item, Payment, Order_Payment and Order_Receipt on the server
+async function confirmPayment() {
+    const { total } = getCartTotals();
+    const method = document.getElementById("pay-method").value;
+    const isCash = method === "Cash";
+    const given = isCash ? (parseFloat(document.getElementById("pay-tendered").value) || 0) : total;
+    const errBox = document.getElementById("pay-error");
+    const btn = document.getElementById("pay-confirm-btn");
+
+    if (isCash && given < total) {
+        errBox.textContent = "The cash given is less than the total amount.";
+        errBox.style.display = "block";
+        return;
+    }
+    errBox.style.display = "none";
 
     const payload = {
         customerName: currentCustomerName,
         customerType: currentCustomerType,
+        universityID: currentUniversityId,
         employeeID: 1,
-        totalAmount: totalAmount,
+        totalAmount: total,
+        paymentMethod: method,
+        amountTendered: given,
         items: cart.map(item => ({
             productID: item.productID,
             quantity: item.quantity,
             unitPrice: item.price
         }))
     };
+
+    btn.disabled = true;
+    btn.textContent = "Processing...";
 
     try {
         const res = await fetch(`${API_URL}/Orders`, {
@@ -327,23 +417,53 @@ async function payNow() {
         });
 
         if (res.ok) {
-            const result = await res.json();
-            
-            document.getElementById("success-order-id").textContent = `#${result.orderId}`;
-            document.getElementById("success-cust-name").textContent = `${result.customerName} (${currentCustomerType})`;
-            document.getElementById("success-item-count").textContent = `${cart.reduce((a, b) => a + b.quantity, 0)} items`;
-            document.getElementById("success-total-amount").textContent = `₱${totalAmount.toFixed(2)}`;
+            const r = await res.json();
 
+            document.getElementById("success-receipt-no").textContent = r.receiptNumber;
+            document.getElementById("success-date").textContent = r.receiptDate;
+            document.getElementById("success-order-id").textContent = `#${r.orderId}`;
+            document.getElementById("success-cust-name").textContent = `${r.customerName} (${r.customerType || currentCustomerType})`;
+            const uniRow = document.getElementById("success-uni-row");
+            if (r.universityId && r.universityId !== "N/A") {
+                document.getElementById("success-uni-id").textContent = r.universityId;
+                uniRow.style.display = "block";
+            } else {
+                uniRow.style.display = "none";
+            }
+            document.getElementById("success-item-count").textContent = `${r.items.reduce((a, b) => a + b.quantity, 0)} items`;
+            document.getElementById("success-items-list").innerHTML = r.items
+                .map(i => `${i.quantity} × ${i.productName} — ${peso(i.lineTotal)}`)
+                .join('<br>');
+            document.getElementById("success-subtotal").textContent = peso(r.subtotal);
+            document.getElementById("success-tax").textContent = peso(r.tax);
+            document.getElementById("success-method").textContent = r.paymentMethod;
+            document.getElementById("success-total-amount").textContent = peso(r.totalAmount);
+
+            const cashRows = document.getElementById("success-change-rows");
+            if (r.paymentMethod.toLowerCase() === "cash") {
+                document.getElementById("success-tendered").textContent = peso(r.amountTendered);
+                document.getElementById("success-change").textContent = peso(r.change);
+                cashRows.style.display = "block";
+            } else {
+                cashRows.style.display = "none";
+            }
+
+            closePayModal();
             document.getElementById("success-modal").style.display = "flex";
 
             cart = [];
             updateCart();
         } else {
             const err = await res.text();
-            alert(`Error processing payment: ${err}`);
+            errBox.textContent = `Payment failed: ${err}`;
+            errBox.style.display = "block";
         }
     } catch (err) {
-        alert("Network error: Please verify C# API server is running.");
+        errBox.textContent = "Network error: Please verify the C# API server is running.";
+        errBox.style.display = "block";
+    } finally {
+        btn.disabled = false;
+        btn.textContent = "Confirm Payment";
     }
 }
 
